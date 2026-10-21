@@ -1,0 +1,3652 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Balance de logros 2026 · CCJ</title>
+  <meta name="description" content="Encuesta interactiva y moderna estilo Duolingo para el balance de logros 2026 de la Comisión Colombiana de Juristas (CCJ)." />
+  <meta property="og:title" content="Balance de logros 2026 · CCJ" />
+  <meta property="og:description" content="Encuesta interactiva y moderna estilo Duolingo para el balance de logros 2026 de la Comisión Colombiana de Juristas (CCJ)." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Google Fonts: Fredoka (600, 700) & Nunito (400, 600, 700, 800) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --primary: #58cc02;
+      --primary-dark: #46a302;
+      --primary-light: #e5f9d7;
+      --sky: #1cb0f6;
+      --sky-dark: #1899d6;
+      --sky-light: #e0f4ff;
+      --purple: #7c3aed;
+      --blue: #2563eb;
+      --slate-50: #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1;
+      --slate-400: #94a3b8;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+      --warning: #f97316;
+      --danger: #ef4444;
+      --card-radius: 24px;
+      --btn-radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+      min-height: 100dvh;
+      color: var(--slate-800);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient background shapes */
+    .bg-shape {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.25;
+    }
+    .bg-shape-1 {
+      top: -100px;
+      left: -100px;
+      width: 400px;
+      height: 400px;
+      background: #38bdf8;
+    }
+    .bg-shape-2 {
+      bottom: -120px;
+      right: -100px;
+      width: 450px;
+      height: 450px;
+      background: #c084fc;
+    }
+
+    /* Main Container */
+    #app-container {
+      width: 100%;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 96px; /* Space for fixed bottom bar */
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header Bar */
+    .survey-header {
+      width: 100%;
+      max-width: 680px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      z-index: 10;
+    }
+
+    .btn-header-close {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      color: #ffffff;
+      font-size: 1.25rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.1s;
+      flex-shrink: 0;
+    }
+    .btn-header-close:hover {
+      background: rgba(255, 255, 255, 0.35);
+    }
+    .btn-header-close:active {
+      transform: scale(0.92);
+    }
+
+    .progress-bar-wrapper {
+      flex: 1;
+      height: 14px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 999px;
+      overflow: hidden;
+      padding: 2px;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--primary);
+      border-radius: 999px;
+      transition: width 0.4s cubic-bezier(0.34, 1.3, 0.64, 1);
+      position: relative;
+    }
+    .progress-bar-fill::after {
+      content: '';
+      position: absolute;
+      top: 1px;
+      left: 4px;
+      right: 4px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 999px;
+    }
+
+    .section-tag {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(8px);
+      padding: 6px 14px;
+      border-radius: 999px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Central Survey Card */
+    .card-wrapper {
+      width: 100%;
+      max-width: 640px;
+      padding: 0 16px;
+      display: flex;
+      justify-content: center;
+      margin-top: 4px;
+    }
+
+    .survey-card {
+      background: #ffffff;
+      width: 100%;
+      border-radius: var(--card-radius);
+      padding: 32px 28px 24px;
+      box-shadow: 0 20px 35px -8px rgba(15, 23, 42, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.2);
+      max-height: calc(100dvh - 170px);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--slate-300) transparent;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .survey-card::-webkit-scrollbar {
+      width: 6px;
+    }
+    .survey-card::-webkit-scrollbar-thumb {
+      background-color: var(--slate-300);
+      border-radius: 999px;
+    }
+
+    /* Screen Slide Animations */
+    .slide-in-right {
+      animation: slideInRight 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .slide-in-left {
+      animation: slideInLeft 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .slide-out-left {
+      animation: slideOutLeft 0.2s cubic-bezier(0.7, 0, 0.84, 0) forwards;
+    }
+    .slide-out-right {
+      animation: slideOutRight 0.2s cubic-bezier(0.7, 0, 0.84, 0) forwards;
+    }
+
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(36px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-36px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideOutLeft {
+      from { opacity: 1; transform: translateX(0); }
+      to { opacity: 0; transform: translateX(-36px); }
+    }
+    @keyframes slideOutRight {
+      from { opacity: 1; transform: translateX(0); }
+      to { opacity: 0; transform: translateX(36px); }
+    }
+
+    @keyframes popEffect {
+      0% { transform: scale(0.97); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(0.8); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translateY(-70px) scale(1.2); opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .slide-in-right, .slide-in-left, .slide-out-left, .slide-out-right {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      .progress-bar-fill {
+        transition: none !important;
+      }
+    }
+
+    /* Typography inside Card */
+    .survey-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--slate-900);
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .survey-subtitle {
+      font-size: 0.96rem;
+      color: var(--slate-600);
+      margin-bottom: 20px;
+      line-height: 1.45;
+    }
+
+    .question-block {
+      margin-bottom: 24px;
+    }
+    .question-block:last-of-type {
+      margin-bottom: 12px;
+    }
+
+    .question-label {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--slate-800);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-footer-notice {
+      margin-top: auto;
+      padding-top: 18px;
+      font-size: 0.78rem;
+      color: var(--slate-400);
+      text-align: center;
+      line-height: 1.35;
+      border-top: 1px dashed var(--slate-200);
+    }
+
+    /* 3D Button Styles */
+    .btn-3d {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      border-radius: var(--btn-radius);
+      padding: 12px 24px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.15s ease;
+      user-select: none;
+      outline: none;
+      text-decoration: none;
+    }
+
+    .btn-3d:active:not(:disabled) {
+      transform: translateY(4px);
+      box-shadow: 0 0 0 transparent !important;
+    }
+
+    .btn-3d-primary {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      box-shadow: 0 4px 0 var(--primary-dark);
+    }
+    .btn-3d-primary:hover:not(:disabled) {
+      background: #52be02;
+    }
+
+    .btn-3d-secondary {
+      background: var(--slate-100);
+      color: var(--slate-600);
+      border: 2px solid var(--slate-200);
+      box-shadow: 0 4px 0 var(--slate-300);
+    }
+    .btn-3d-secondary:hover:not(:disabled) {
+      background: #e9eef5;
+      color: var(--slate-800);
+    }
+
+    .btn-3d-sky {
+      background: var(--sky);
+      color: #ffffff;
+      border: none;
+      box-shadow: 0 4px 0 var(--sky-dark);
+    }
+    .btn-3d-sky:hover:not(:disabled) {
+      background: #199ee0;
+    }
+
+    .btn-3d:disabled {
+      background: var(--slate-200) !important;
+      color: var(--slate-400) !important;
+      box-shadow: 0 4px 0 var(--slate-300) !important;
+      cursor: not-allowed !important;
+      transform: none !important;
+    }
+
+    /* Fixed Bottom Bar */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-top: 2px solid var(--slate-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 20px;
+      z-index: 50;
+      box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.06);
+    }
+
+    .bottom-bar-inner {
+      width: 100%;
+      max-width: 640px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .btn-skip {
+      background: none;
+      border: none;
+      color: var(--slate-400);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: color 0.2s;
+    }
+    .btn-skip:hover {
+      color: var(--slate-700);
+      text-decoration: underline;
+    }
+
+    /* Option Cards */
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .options-grid.grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (max-width: 480px) {
+      .options-grid.grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .option-card {
+      border: 2px solid var(--slate-200);
+      border-radius: 16px;
+      padding: 12px 16px;
+      background: #ffffff;
+      box-shadow: 0 4px 0 var(--slate-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.96rem;
+      color: var(--slate-700);
+      transition: border-color 0.15s, background-color 0.15s, box-shadow 0.15s, transform 0.08s;
+      user-select: none;
+      text-align: left;
+    }
+    .option-card:hover {
+      border-color: var(--slate-300);
+      box-shadow: 0 4px 0 var(--slate-300);
+    }
+    .option-card:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 var(--slate-300);
+    }
+    .option-card.selected {
+      border-color: var(--sky);
+      background-color: var(--sky-light);
+      box-shadow: 0 4px 0 var(--sky-dark);
+      color: #0369a1;
+      animation: popEffect 0.2s ease;
+    }
+
+    .option-card-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+    .option-emoji {
+      font-size: 1.25rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    /* Radio / Checkbox indicators */
+    .indicator-circle {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--slate-300);
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+    .option-card.selected .indicator-circle {
+      border-color: var(--sky);
+      background: var(--sky);
+    }
+    .option-card.selected .indicator-circle::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #ffffff;
+      border-radius: 50%;
+    }
+
+    .indicator-square {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 2px solid var(--slate-300);
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+    .option-card.selected .indicator-square {
+      border-color: var(--sky);
+      background: var(--sky);
+      color: #ffffff;
+    }
+    .indicator-square-icon {
+      display: none;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .option-card.selected .indicator-square-icon {
+      display: block;
+    }
+
+    /* Text Inputs & Textarea */
+    .input-text {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--slate-200);
+      border-radius: 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      color: var(--slate-800);
+      background: var(--slate-50);
+      outline: none;
+      transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+    }
+    .input-text:focus {
+      border-color: var(--sky);
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(28, 176, 246, 0.15);
+    }
+
+    .textarea-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    .textarea-field {
+      width: 100%;
+      min-height: 100px;
+      padding: 12px 16px;
+      padding-bottom: 28px;
+      border: 2px solid var(--slate-200);
+      border-radius: 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      color: var(--slate-800);
+      background: var(--slate-50);
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+    .textarea-field:focus {
+      border-color: var(--sky);
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(28, 176, 246, 0.15);
+    }
+    .word-counter {
+      position: absolute;
+      bottom: 8px;
+      right: 12px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--slate-400);
+      background: rgba(255, 255, 255, 0.85);
+      padding: 1px 6px;
+      border-radius: 6px;
+      pointer-events: none;
+    }
+    .word-counter.warning {
+      color: var(--warning);
+    }
+    .word-counter.exceeded {
+      color: var(--danger);
+      font-weight: 900;
+    }
+
+    /* Chips container */
+    .chips-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chip {
+      background: #ffffff;
+      border: 2px solid var(--slate-200);
+      box-shadow: 0 3px 0 var(--slate-200);
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--slate-700);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .chip:hover {
+      border-color: var(--slate-300);
+      box-shadow: 0 3px 0 var(--slate-300);
+    }
+    .chip:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--slate-300);
+    }
+    .chip.selected {
+      background: var(--sky-light);
+      border-color: var(--sky);
+      box-shadow: 0 3px 0 var(--sky-dark);
+      color: #0284c7;
+      animation: popEffect 0.15s ease;
+    }
+
+    /* Stepper Component */
+    .stepper-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 12px 0;
+    }
+    .stepper-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid var(--slate-200);
+      box-shadow: 0 4px 0 var(--slate-200);
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--slate-700);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.1s;
+    }
+    .stepper-btn:hover:not(:disabled) {
+      border-color: var(--slate-300);
+      background: var(--slate-50);
+    }
+    .stepper-btn:active:not(:disabled) {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 var(--slate-300);
+    }
+    .stepper-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .stepper-input {
+      width: 120px;
+      text-align: center;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--slate-900);
+      border: 2px solid var(--slate-200);
+      border-radius: 16px;
+      padding: 6px 10px;
+      background: var(--slate-50);
+      outline: none;
+    }
+    .stepper-input:focus {
+      border-color: var(--sky);
+      background: #ffffff;
+    }
+
+    /* Faces Scale (5 caritas) */
+    .faces-container {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+    @media (max-width: 520px) {
+      .faces-container {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 4px;
+      }
+    }
+    .face-card {
+      border: 2px solid var(--slate-200);
+      box-shadow: 0 3px 0 var(--slate-200);
+      border-radius: 14px;
+      padding: 10px 4px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s, background-color 0.15s;
+    }
+    .face-card:hover {
+      border-color: var(--slate-300);
+    }
+    .face-card.selected {
+      transform: scale(1.06);
+      border-color: var(--sky);
+      background: var(--sky-light);
+      box-shadow: 0 4px 0 var(--sky-dark);
+      z-index: 2;
+    }
+    .face-emoji {
+      font-size: 1.8rem;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .face-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--slate-600);
+      line-height: 1.2;
+    }
+    .face-card.selected .face-label {
+      color: #0369a1;
+      font-weight: 800;
+    }
+
+    /* Slider Component */
+    .slider-box {
+      background: var(--slate-50);
+      border: 2px solid var(--slate-200);
+      border-radius: 18px;
+      padding: 18px;
+      text-align: center;
+    }
+    .slider-badge {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--purple);
+      margin-bottom: 12px;
+      display: inline-block;
+      padding: 4px 16px;
+      background: #ede9fe;
+      border-radius: 999px;
+      border: 1px solid #ddd6fe;
+    }
+    .range-input {
+      width: 100%;
+      height: 10px;
+      border-radius: 5px;
+      background: var(--slate-200);
+      outline: none;
+      cursor: pointer;
+      accent-color: var(--purple);
+    }
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--slate-400);
+      margin-top: 6px;
+    }
+
+    /* Tag Cloud & Search for Departments */
+    .search-input-wrapper {
+      position: relative;
+      margin-bottom: 12px;
+    }
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--slate-400);
+      font-size: 1.1rem;
+    }
+    .search-input {
+      padding-left: 40px !important;
+    }
+    .depts-scroll-box {
+      max-height: 220px;
+      overflow-y: auto;
+      border: 1px solid var(--slate-200);
+      border-radius: 14px;
+      padding: 10px;
+      background: var(--slate-50);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    /* Dynamic Lists with ➕ Agregar otro */
+    .dynamic-list-item {
+      background: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .btn-remove-item {
+      background: none;
+      border: none;
+      color: var(--slate-400);
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .btn-remove-item:hover {
+      color: var(--danger);
+      background: #fee2e2;
+    }
+
+    /* Expandable "Otro ✏️" section */
+    .expandable-field {
+      margin-top: 10px;
+      overflow: hidden;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+    }
+
+    /* Traffic Light Cards */
+    .traffic-green.selected {
+      border-color: #22c55e !important;
+      background-color: #f0fdf4 !important;
+      box-shadow: 0 4px 0 #16a34a !important;
+      color: #15803d !important;
+    }
+    .traffic-yellow.selected {
+      border-color: #eab308 !important;
+      background-color: #fefce8 !important;
+      box-shadow: 0 4px 0 #ca8a04 !important;
+      color: #a16207 !important;
+    }
+    .traffic-red.selected {
+      border-color: #ef4444 !important;
+      background-color: #fef2f2 !important;
+      box-shadow: 0 4px 0 #dc2626 !important;
+      color: #b91c1c !important;
+    }
+
+    /* Notice callout */
+    .notice-callout {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 0.88rem;
+      color: #1e40af;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: popEffect 0.2s ease;
+    }
+
+    /* Modal System */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-card {
+      background: #ffffff;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 420px;
+      padding: 24px 20px;
+      text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+      transform: scale(0.92);
+      transition: transform 0.2s cubic-bezier(0.34, 1.3, 0.64, 1);
+    }
+    .modal-backdrop.open .modal-card {
+      transform: scale(1);
+    }
+    .modal-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--slate-900);
+      margin-bottom: 8px;
+    }
+    .modal-body {
+      font-size: 0.95rem;
+      color: var(--slate-600);
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+    .modal-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Summary Wrapped Cards */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 480px) {
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .summary-card {
+      background: var(--slate-50);
+      border: 2px solid var(--slate-200);
+      border-radius: 16px;
+      padding: 14px;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+    .summary-card:hover {
+      transform: translateY(-2px);
+    }
+    .summary-number {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--purple);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .summary-card-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--slate-600);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .edit-sections-list {
+      background: var(--slate-50);
+      border-radius: 14px;
+      padding: 10px 14px;
+      margin-bottom: 20px;
+      border: 1px solid var(--slate-200);
+    }
+    .edit-section-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--slate-200);
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--slate-700);
+    }
+    .edit-section-row:last-child {
+      border-bottom: none;
+    }
+    .btn-edit-link {
+      background: none;
+      border: none;
+      color: var(--sky-dark);
+      font-weight: 800;
+      font-size: 0.88rem;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* Fullscreen Celebration Canvas */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Floating celebration particles */
+    .floating-particle {
+      position: absolute;
+      font-size: 1.8rem;
+      pointer-events: none;
+      animation: floatUp 1.2s ease-out forwards;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient decorative glow shapes -->
+  <div class="bg-shape bg-shape-1"></div>
+  <div class="bg-shape bg-shape-2"></div>
+
+  <!-- Confetti Canvas for celebrations and final screen -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <div id="app-container">
+    <!-- Header with Back/Close, Progress Bar and Section Badge -->
+    <header class="survey-header" id="main-header" style="display: none;">
+      <button class="btn-header-close" id="btn-close" aria-label="Cerrar y guardar encuesta">✕</button>
+      <div class="progress-bar-wrapper">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+      <div class="section-tag" id="section-tag">A · Identificación 👋</div>
+    </header>
+
+    <!-- Central Card Mount -->
+    <div class="card-wrapper">
+      <main class="survey-card" id="card-content" role="region" aria-live="polite">
+        <!-- Injected via JavaScript -->
+      </main>
+    </div>
+
+    <!-- Fixed Bottom Bar -->
+    <footer class="bottom-bar" id="bottom-bar" style="display: none;">
+      <div class="bottom-bar-inner">
+        <button class="btn-3d btn-3d-secondary" id="btn-prev">Anterior</button>
+        <button class="btn-skip" id="btn-skip" style="display: none;">Saltar</button>
+        <button class="btn-3d btn-3d-primary" id="btn-next">Continuar 🚀</button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Confirmation Exit Modal -->
+  <div class="modal-backdrop" id="modal-exit">
+    <div class="modal-card">
+      <div style="font-size: 2.5rem; margin-bottom: 8px;">💾</div>
+      <h2 class="modal-title">¿Quieres salir?</h2>
+      <p class="modal-body">No te preocupes: tus respuestas quedan guardadas en este dispositivo para que puedas retomar cuando desees.</p>
+      <div class="modal-actions">
+        <button class="btn-3d btn-3d-primary" id="modal-exit-stay">Seguir respondiendo</button>
+        <button class="btn-3d btn-3d-secondary" id="modal-exit-leave">Guardar y salir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resume Draft Modal -->
+  <div class="modal-backdrop" id="modal-resume">
+    <div class="modal-card">
+      <div style="font-size: 2.5rem; margin-bottom: 8px;">👋</div>
+      <h2 class="modal-title">¿Continuar donde lo dejaste?</h2>
+      <p class="modal-body">Encontramos un borrador guardado en este navegador de una sesión anterior.</p>
+      <div class="modal-actions">
+        <button class="btn-3d btn-3d-primary" id="modal-resume-yes">Continuar borrador 🚀</button>
+        <button class="btn-3d btn-3d-secondary" id="modal-resume-no">Empezar de nuevo</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ==========================================================================
+       CONFIG & WEBHOOK SETUP
+       ========================================================================== */
+    const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxuKP9zVZVMd20e7_4n8GPW4N8JZ5Qm5coYm_cGpInYDtAMALGjIX5vGGlDBEYdX49E4w/exec";
+    const STORAGE_KEY = "ccj_balance_2026_draft";
+
+    /* ==========================================================================
+       STATE & DEFAULT PAYLOAD STRUCTURE
+       ========================================================================== */
+    const defaultRespuestas = () => ({
+      enviadoEn: "",
+      nombre: "",
+      coordinacion: "",
+      coordinacionOtra: "",
+      logros: [
+        {
+          descripcion: "",
+          tipo: [],
+          tipoOtro: "",
+          beneficioCantidad: 0,
+          beneficioUnidad: "Familias",
+          beneficioAproximada: true,
+          certeza: "",
+          documentos: [],
+          documentosOtro: "",
+          publico: "",
+          significado: [],
+          significadoOtro: "",
+          significadoTexto: ""
+        }
+      ],
+      espera: {
+        aplica: true,
+        caso: "",
+        anioHechos: 2000,
+        aniosEspera: 26,
+        publicoNombrable: ""
+      },
+      temas: {
+        lista: [],
+        otro: "",
+        masTiempo: "",
+        creciente: "",
+        crecienteTipo: "ninguno"
+      },
+      escenarios: {
+        lista: [],
+        otro: ""
+      },
+      territorios: {
+        departamentos: [],
+        comunidades: {
+          campesinas: 0,
+          indigenas: 0,
+          afrodescendientes: 0,
+          victimas: 0,
+          mujeres: 0,
+          otras: 0,
+          otrasNombre: ""
+        },
+        totalComunidades: 0,
+        autorizacionMencion: "",
+        comunidadesAutorizadas: []
+      },
+      publicaciones: {
+        tipos: [],
+        items: [],
+        destacadas: []
+      },
+      eventos: [],
+      sinEventos: false,
+      memoria: {
+        hubo: false,
+        actos: []
+      }
+    });
+
+    let respuestas = defaultRespuestas();
+    let currentScreenId = "welcome";
+    let navigationHistory = [];
+    let activeLogroIndex = 0; // 0, 1, or 2
+    let isTransitioning = false;
+    let transitionDirection = "next"; // "next" or "prev"
+
+    /* 32 Departamentos de Colombia + Bogotá D.C. */
+    const DEPARTAMENTOS_COLOMBIA = [
+      "Amazonas", "Antioquia", "Arauca", "Atlántico", "Bogotá D.C.",
+      "Bolívar", "Boyacá", "Caldas", "Caquetá", "Casanare",
+      "Cauca", "Cesar", "Chocó", "Córdoba", "Cundinamarca",
+      "Guainía", "Guaviare", "Huila", "La Guajira", "Magdalena",
+      "Meta", "Nariño", "Norte de Santander", "Putumayo", "Quindío",
+      "Risaralda", "San Andrés y Providencia", "Santander", "Sucre", "Tolima",
+      "Valle del Cauca", "Vaupés", "Vichada"
+    ];
+
+    /* ==========================================================================
+       STORAGE ENGINE (TRY/CATCH ROBUSTNESS)
+       ========================================================================== */
+    function saveDraft() {
+      try {
+        const payload = {
+          respuestas,
+          currentScreenId,
+          activeLogroIndex
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+      } catch (e) {
+        console.warn("No se pudo guardar borrador en localStorage:", e);
+      }
+    }
+
+    function loadDraft() {
+      try {
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (!data) return false;
+        const parsed = JSON.parse(data);
+        if (parsed && parsed.respuestas) {
+          respuestas = Object.assign(defaultRespuestas(), parsed.respuestas);
+          currentScreenId = parsed.currentScreenId || "welcome";
+          activeLogroIndex = parsed.activeLogroIndex || 0;
+          return true;
+        }
+      } catch (e) {
+        console.warn("Error leyendo borrador:", e);
+      }
+      return false;
+    }
+
+    function clearDraft() {
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (e) {
+        console.warn("Error eliminando borrador:", e);
+      }
+    }
+
+    /* ==========================================================================
+       CONFETTI CANVAS ENGINE (LIGHTWEIGHT, NO LIBRARIES)
+       ========================================================================== */
+    const canvas = document.getElementById("confetti-canvas");
+    const ctx = canvas.getContext("2d");
+    let confettiParticles = [];
+    let confettiAnimationId = null;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    function triggerConfetti(durationMs = 2500, count = 75) {
+      const colors = ["#58cc02", "#1cb0f6", "#7c3aed", "#ffc800", "#ff4b4b", "#2b70c9"];
+      for (let i = 0; i < count; i++) {
+        confettiParticles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height * 0.4,
+          w: Math.random() * 9 + 6,
+          h: Math.random() * 7 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vx: (Math.random() - 0.5) * 6,
+          vy: Math.random() * 4 + 3,
+          rot: Math.random() * 360,
+          vrot: (Math.random() - 0.5) * 10,
+          opacity: 1
+        });
+      }
+
+      if (!confettiAnimationId) {
+        let startTime = performance.now();
+        function renderConfetti(now) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          confettiParticles.forEach((p, idx) => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.rot += p.vrot;
+            p.opacity -= 0.007;
+
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rot * Math.PI) / 180);
+            ctx.globalAlpha = Math.max(0, p.opacity);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+            ctx.restore();
+          });
+
+          confettiParticles = confettiParticles.filter(p => p.opacity > 0 && p.y < canvas.height);
+
+          if (confettiParticles.length > 0) {
+            confettiAnimationId = requestAnimationFrame(renderConfetti);
+          } else {
+            confettiAnimationId = null;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+          }
+        }
+        confettiAnimationId = requestAnimationFrame(renderConfetti);
+      }
+    }
+
+    function triggerFloatingEmoji(emoji, targetEl) {
+      if (!targetEl) return;
+      const rect = targetEl.getBoundingClientRect();
+      const el = document.createElement("div");
+      el.className = "floating-particle";
+      el.textContent = emoji;
+      el.style.left = `${rect.left + rect.width / 2}px`;
+      el.style.top = `${rect.top}px`;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1200);
+    }
+
+    /* Word counter utility */
+    function getWordCount(text) {
+      if (!text) return 0;
+      const trimmed = text.trim();
+      return trimmed === "" ? 0 : trimmed.split(/\s+/).length;
+    }
+
+    /* ==========================================================================
+       SCREENS SPECIFICATION & DYNAMIC ENGINE
+       ========================================================================== */
+    const SCREENS = [
+      {
+        id: "welcome",
+        section: "",
+        sectionLabel: "",
+        render: () => `
+          <div style="text-align: center; padding: 20px 0;">
+            <div style="font-size: 4rem; margin-bottom: 16px;">🏆</div>
+            <h1 class="survey-title" style="font-size: 2.1rem; margin-bottom: 14px;">Balance de logros 2026 🏆</h1>
+            <p class="survey-subtitle" style="font-size: 1.1rem; max-width: 480px; margin: 0 auto 28px;">
+              Ayúdanos a construir el balance del año de la CCJ. Toma unos 10 a 15 minutos y tus respuestas son de uso interno.
+            </p>
+            <button class="btn-3d btn-3d-primary" id="btn-start" style="font-size: 1.25rem; padding: 14px 40px;">
+              ¡Empezar! 🚀
+            </button>
+            <div class="card-footer-notice" style="margin-top: 36px;">
+              Información de uso interno de la CCJ. No incluyas nombres de víctimas individuales.
+            </div>
+          </div>
+        `,
+        attachHandlers: () => {
+          document.getElementById("btn-start").addEventListener("click", () => {
+            goToScreen("A1");
+          });
+        },
+        isValid: () => true
+      },
+
+      /* SECCIÓN A: IDENTIFICACIÓN */
+      {
+        id: "A1",
+        section: "A",
+        sectionLabel: "A · Identificación 👋",
+        render: () => {
+          const areas = [
+            { id: "litigio_penal", label: "Litigio penal", emoji: "⚖️" },
+            { id: "litigio_internacional", label: "Litigio internacional y contencioso administrativo", emoji: "🌍" },
+            { id: "tierras", label: "Tierras y territorio", emoji: "🌾" },
+            { id: "jep", label: "JEP", emoji: "🕊️" },
+            { id: "fortalecimiento", label: "Fortalecimiento organizativo", emoji: "🤝" },
+            { id: "investigacion", label: "Investigación", emoji: "🔎" },
+            { id: "incidencia_nacional", label: "Incidencia nacional", emoji: "🏛️" },
+            { id: "incidencia_internacional", label: "Incidencia internacional", emoji: "🌐" },
+            { id: "comunicaciones", label: "Comunicaciones", emoji: "📣" },
+            { id: "otra", label: "Otra", emoji: "✏️" }
+          ];
+
+          return `
+            <h2 class="survey-title">Identificación de tu equipo 👋</h2>
+            <p class="survey-subtitle">Empecemos conociendo quién reporta este balance.</p>
+
+            <div class="question-block">
+              <label class="question-label" for="input-nombre">1. Nombre de quien responde.</label>
+              <input type="text" id="input-nombre" class="input-text" placeholder="Ej. Alejandra Zapata" value="${escapeHtml(respuestas.nombre)}" />
+            </div>
+
+            <div class="question-block">
+              <label class="question-label">2. Coordinación o área.</label>
+              <div class="options-grid grid-2" role="radiogroup" aria-label="Coordinación o área">
+                ${areas.map(a => {
+                  const isSel = respuestas.coordinacion === a.id;
+                  return `
+                    <div class="option-card ${isSel ? 'selected' : ''}" data-area-id="${a.id}" role="radio" aria-checked="${isSel}">
+                      <div class="option-card-content">
+                        <span class="option-emoji">${a.emoji}</span>
+                        <span>${a.label}</span>
+                      </div>
+                      <div class="indicator-circle"></div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+
+              <div id="otra-area-wrapper" class="expandable-field" style="display: ${respuestas.coordinacion === 'otra' ? 'block' : 'none'};">
+                <input type="text" id="input-otra-area" class="input-text" placeholder="Escribe el nombre de tu área..." value="${escapeHtml(respuestas.coordinacionOtra || '')}" />
+              </div>
+            </div>
+
+            <div class="card-footer-notice">
+              Información de uso interno de la CCJ. No incluyas nombres de víctimas individuales.
+            </div>
+          `;
+        },
+        attachHandlers: () => {
+          const inputNombre = document.getElementById("input-nombre");
+          inputNombre.addEventListener("input", (e) => {
+            respuestas.nombre = e.target.value.trim();
+            saveDraft();
+            updateBottomBar();
+          });
+
+          const cards = document.querySelectorAll("[data-area-id]");
+          const otraWrapper = document.getElementById("otra-area-wrapper");
+          const inputOtra = document.getElementById("input-otra-area");
+
+          cards.forEach(card => {
+            card.addEventListener("click", () => {
+              const areaId = card.getAttribute("data-area-id");
+              respuestas.coordinacion = areaId;
+              cards.forEach(c => {
+                c.classList.remove("selected");
+                c.setAttribute("aria-checked", "false");
+              });
+              card.classList.add("selected");
+              card.setAttribute("aria-checked", "true");
+
+              if (areaId === "otra") {
+                otraWrapper.style.display = "block";
+                inputOtra.focus();
+              } else {
+                otraWrapper.style.display = "none";
+              }
+              saveDraft();
+              updateBottomBar();
+            });
+          });
+
+          if (inputOtra) {
+            inputOtra.addEventListener("input", (e) => {
+              respuestas.coordinacionOtra = e.target.value.trim();
+              saveDraft();
+              updateBottomBar();
+            });
+          }
+        },
+        isValid: () => {
+          if (!respuestas.nombre || respuestas.nombre.trim().length === 0) return false;
+          if (!respuestas.coordinacion) return false;
+          if (respuestas.coordinacion === "otra" && (!respuestas.coordinacionOtra || respuestas.coordinacionOtra.trim().length === 0)) return false;
+          return true;
+        }
+      },
+
+      /* SECCIÓN B: PANTALLA B1 */
+      {
+        id: "B1",
+        section: "B",
+        sectionLabel: "B · Logros 🏆",
+        render: () => {
+          const n = activeLogroIndex + 1;
+          const dots = ["○", "○", "○"];
+          for (let i = 0; i < n; i++) dots[i] = "●";
+          const dotStr = dots.join("");
+
+          const curLogro = getOrCreateCurrentLogro();
+          const tipos = [
+            { id: "decision_judicial", label: "Decisión judicial", emoji: "⚖️" },
+            { id: "acuerdo_estado", label: "Acuerdo o reconocimiento del Estado", emoji: "🏛️" },
+            { id: "norma_politica", label: "Norma o política pública", emoji: "📜" },
+            { id: "hallazgo", label: "Hallazgo de investigación", emoji: "🔍" },
+            { id: "acompanamiento", label: "Acompañamiento a víctimas", emoji: "🫂" },
+            { id: "fortalecimiento", label: "Fortalecimiento de organizaciones", emoji: "💪" },
+            { id: "otro", label: "Otro", emoji: "✏️" }
+          ];
+
+          const greeting = respuestas.nombre ? `¡Hola, ${escapeHtml(respuestas.nombre)}! 👋` : "Logros del año 2026 🏆";
+          const wordCount = getWordCount(curLogro.descripcion);
+          const counterClass = wordCount > 40 ? "exceeded" : wordCount >= 36 ? "warning" : "";
+
+          return `
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+              <h2 class="survey-title" style="margin-bottom: 0;">${greeting}</h2>
+              <span style="font-family: 'Fredoka'; font-weight: 700; color: var(--purple); font-size: 0.95rem;">Logro ${n} de 3 ${dotStr}</span>
+            </div>
+            <p class="survey-subtitle">3. ¿Cuáles fueron los 3 logros más importantes de su coordinación este año? Describa cada uno en máximo 40 palabras.</p>
+
+            <div class="question-block">
+              <label class="question-label" for="textarea-logro-desc">Descripción del logro (máximo 40 palabras):</label>
+              <div class="textarea-wrapper">
+                <textarea id="textarea-logro-desc" class="textarea-field" placeholder="Escribe aquí de manera clara y sintética...">${escapeHtml(curLogro.descripcion || '')}</textarea>
+                <div id="logro-word-counter" class="word-counter ${counterClass}">${wordCount}/40</div>
+              </div>
+            </div>
+
+            <div class="question-block">
+              <label class="question-label">4. ¿Qué tipo de logro fue? <span style="font-size: 0.82rem; font-weight: 600; color: var(--slate-400);">(máximo 2)</span></label>
+              <div class="options-grid">
+                ${tipos.map(t => {
+                  const isSel = curLogro.tipo.includes(t.id);
+                  return `
+                    <div class="option-card ${isSel ? 'selected' : ''}" data-tipo-id="${t.id}" role="checkbox" aria-checked="${isSel}">
+                      <div class="option-card-content">
+                        <span class="option-emoji">${t.emoji}</span>
+                        <span>${t.label}</span>
+                      </div>
+                      <div class="indicator-square">
+                        <span class="indicator-square-icon">✓</span>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+
+              <div id="tipo-otro-wrapper" class="expandable-field" style="display: ${curLogro.tipo.includes('otro') ? 'block' : 'none'};">
+                <input type="text" id="input-tipo-otro" class="input-text" placeholder="¿Qué otro tipo de logro fue?..." value="${escapeHtml(curLogro.tipoOtro || '')}" />
+              </div>
+            </div>
+
+            <div class="card-footer-notice">
+              Información de uso interno de la CCJ. No incluyas nombres de víctimas individuales.
+            </div>
+          `;
+        },
+        attachHandlers: () => {
+          const curLogro = getOrCreateCurrentLogro();
+          const textarea = document.getElementById("textarea-logro-desc");
+          const counter = document.getElementById("logro-word-counter");
+
+          textarea.addEventListener("input", (e) => {
+            curLogro.descripcion = e.target.value;
+            const count = getWordCount(curLogro.descripcion);
+            counter.textContent = `${count}/40`;
+            counter.className = `word-counter ${count > 40 ? "exceeded" : count >= 36 ? "warning" : ""}`;
+            saveDraft();
+            updateBottomBar();
+          });
+
+          const cards = document.querySelectorAll("[data-tipo-id]");
+          const otroWrapper = document.getElementById("tipo-otro-wrapper");
+          const inputOtro = document.getElementById("input-tipo-otro");
+
+          cards.forEach(card => {
+            card.addEventListener("click", () => {
+              const tipoId = card.getAttribute("data-tipo-id");
+              const idx = curLogro.tipo.indexOf(tipoId);
+              if (idx > -1) {
+                curLogro.tipo.splice(idx, 1);
+                card.classList.remove("selected");
+                card.setAttribute("aria-checked", "false");
+              } else {
+                if (curLogro.tipo.length >= 2) {
+                  // Reemplaza el primero o notifica
+                  const first = curLogro.tipo.shift();
+                  const firstCard = document.querySelector(`[data-tipo-id="${first}"]`);
+                  if (firstCard) {
+                    firstCard.classList.remove("selected");
+                    firstCard.setAttribute("aria-checked", "false");
+                  }
+                }
+                curLogro.tipo.push(tipoId);
+                card.classList.add("selected");
+                card.setAttribute("aria-checked", "true");
+              }
+
+              if (curLogro.tipo.includes("otro")) {
+                otroWrapper.style.display = "block";
+              } else {
+                otroWrapper.style.display = "none";
+              }
+              saveDraft();
+              updateBottomBar();
+            });
+          });
+
+          if (inputOtro) {
+            inputOtro.addEventListener("input", (e) => {
+              curLogro.tipoOtro = e.target.value.trim();
+              saveDraft();
+              updateBottomBar();
+            });
+          }
+        },
+        isValid: () => {
+          const curLogro = getOrCreateCurrentLogro();
+          const count = getWordCount(curLogro.descripcion);
+          // Si es el logro 1 es estrictamente obligatorio
+          if (activeLogroIndex === 0) {
+            if (count === 0 || count > 40) return false;
+            if (curLogro.tipo.length === 0) return false;
+            if (curLogro.tipo.includes("otro") && (!curLogro.tipoOtro || curLogro.tipoOtro.trim() === "")) return false;
+            return true;
+          } else {
+            // Para logros 2 y 3, si escribe descripción no puede exceder 40 palabras
+            if (count > 40) return false;
+            return true;
+          }
+        }
+      },
+
+      /* SECCIÓN B: PANTALLA B2 */
+      {
+        id: "B2",
+        section: "B",
+        sectionLabel: "B · Logros 🏆",
+        render: () => {
+          const n = activeLogroIndex + 1;
+          const curLogro = getOrCreateCurrentLogro();
+
+          const docs = [
+            { id: "sentencia", label: "📄 Sentencia" },
+            { id: "acta", label: "📝 Acta" },
+            { id: "comunicado", label: "📣 Comunicado" },
+            { id: "informe", label: "📊 Informe" },
+            { id: "otro", label: "✏️ Otro" },
+            { id: "ninguno", label: "❌ Todavía no hay" }
+          ];
+
+          const faces = [
+            { id: "muy_aproximada", emoji: "😬", label: "Muy aproximada" },
+            { id: "poco_segura", emoji: "😕", label: "Poco segura" },
+            { id: "razonable", emoji: "😐", label: "Razonable" },
+            { id: "bastante_segura", emoji: "🙂", label: "Bastante segura" },
+            { id: "verificada", emoji: "🤩", label: "Verificada con documento" }
+          ];
+
+          const isNumPositive = (curLogro.beneficioCantidad || 0) > 0;
+          const liveText = (curLogro.beneficioCantidad !== undefined && curLogro.beneficioCantidad !== null)
+            ? `${curLogro.beneficioAproximada ? '≈ ' : ''}${curLogro.beneficioCantidad} ${curLogro.beneficioUnidad.toLowerCase()}`
+            : 'No definido';
+
+          return `
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+              <h2 class="survey-title" style="margin-bottom: 0;">Impacto y Respaldo 📊</h2>
+              <span style="font-family: 'Fredoka'; font-weight: 700; color: var(--purple); font-size: 0.95rem;">Logro ${n} de 3</span>
+            </div>
+            <p class="survey-subtitle">5. ¿A cuántas personas, familias o comunidades benefició? Indique la cifra aproximada.</p>
+
+            <div class="question-block">
+              <!-- Chips de unidad -->
+              <div class="chips-wrapper" style="margin-bottom: 12px;">
+                ${["Personas", "Familias", "Comunidades"].map(u => {
+                  const emoji = u === "Personas" ? "👤" : u === "Familias" ? "👨‍👩‍👧" : "🏘️";
+                  const isSel = curLogro.beneficioUnidad === u;
+                  return `<button type="button" class="chip ${isSel ? 'selected' : ''}" data-unit="${u}">${emoji} ${u}</button>`;
+                }).join('')}
+              </div>
+
+              <!-- Stepper grande -->
+              <div class="stepper-container">
+                <button type="button" class="stepper-btn" id="stepper-sub">−</button>
+                <input type="number" id="stepper-val" class="stepper-input" min="0" value="${curLogro.beneficioCantidad || 0}" />
+                <button type="button" class="stepper-btn" id="stepper-add">+</button>
+              </div>
+
+              <!-- Modificadores -->
+              <div class="chips-wrapper" style="justify-content: center; margin-top: 8px;">
+                <button type="button" class="chip ${curLogro.beneficioAproximada ? 'selected' : ''}" id="chip-aprox">≈ Cifra aproximada</button>
+                <button type="button" class="chip ${curLogro.beneficioCantidad === -1 ? 'selected' : ''}" id="chip-noaplica">No lo sé / no aplica</button>
+              </div>
+
+              <div id="live-benefit-text" style="text-align: center; font-family: 'Fredoka'; font-size: 1.25rem; color: var(--purple); margin-top: 12px;">
+                ${curLogro.beneficioCantidad === -1 ? 'No aplica / No especificado' : liveText}
+              </div>
+
+              <!-- Escala de 5 caritas si número > 0 -->
+              <div id="faces-scale-wrapper" class="expandable-field" style="display: ${isNumPositive && curLogro.beneficioCantidad !== -1 ? 'block' : 'none'}; margin-top: 16px;">
+                <label class="question-label" style="font-size: 0.95rem;">¿Qué tan segura es esta cifra? <span style="font-size: 0.8rem; font-weight: normal; color: var(--slate-400);">(opcional)</span></label>
+                <div class="faces-container">
+                  ${faces.map(f => {
+                    const isSel = curLogro.certeza === f.id;
+                    return `
+                      <div class="face-card ${isSel ? 'selected' : ''}" data-face-id="${f.id}" role="button">
+                        <span class="face-emoji">${f.emoji}</span>
+                        <span class="face-label">${f.label}</span>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            </div>
+
+            <!-- Pregunta 6: Documento de respaldo -->
+            <div class="question-block" style="margin-top: 24px;">
+              <label class="question-label">6. ¿Hay documento de respaldo?</label>
+              <div class="chips-wrapper">
+                ${docs.map(d => {
+                  const isSel = curLogro.documentos.includes(d.id);
+                  return `<button type="button" class="chip ${isSel ? 'selected' : ''}" data-doc-id="${d.id}">${d.label}</button>`;
+                }).join('')}
+              </div>
+
+              <div id="doc-otro-wrapper" class="expandable-field" style="display: ${curLogro.documentos.includes('otro') ? 'block' : 'none'};">
+                <input type="text" id="input-doc-otro" class="input-text" placeholder="¿Cuál documento de respaldo?..." value="${escapeHtml(curLogro.documentosOtro || '')}" />
+              </div>
+            </div>
+
+            <div class="card-footer-notice">
+              Información de uso interno de la CCJ. No incluyas nombres de víctimas individuales.
+            </div>
+          `;
+        },
+        attachHandlers: () => {
+          const curLogro = getOrCreateCurrentLogro();
+          const stepperSub = document.getElementById("stepper-sub");
+          const stepperAdd = document.getElementById("stepper-add");
+          const stepperVal = document.getElementById("stepper-val");
+          const chipAprox = document.getElementById("chip-aprox");
+          const chipNoAplica = document.getElementById("chip-noaplica");
+          const liveTextEl = document.getElementById("live-benefit-text");
+          const facesWrapper = document.getElementById("faces-scale-wrapper");
+
+          function updateLiveText() {
+            if (curLogro.beneficioCantidad === -1) {
+              liveTextEl.textContent = "No aplica / No especificado";
+              facesWrapper.style.display = "none";
+              return;
+            }
+            const q = curLogro.beneficioCantidad || 0;
+            liveTextEl.textContent = `${curLogro.beneficioAproximada ? '≈ ' : ''}${q} ${curLogro.beneficioUnidad.toLowerCase()}`;
+            facesWrapper.style.display = q > 0 ? "block" : "none";
+          }
+
+          stepperSub.addEventListener("click", () => {
+            let current = parseInt(stepperVal.value, 10) || 0;
+            if (current > 0) current = Math.max(0, current - (current > 100 ? 50 : current > 20 ? 10 : 1));
+            stepperVal.value = current;
+            curLogro.beneficioCantidad = current;
+            chipNoAplica.classList.remove("selected");
+            updateLiveText();
+            saveDraft();
+          });
+
+          stepperAdd.addEventListener("click", () => {
+            let current = parseInt(stepperVal.value, 10) || 0;
+            current += (current >= 100 ? 50 : current >= 20 ? 10 : 1);
+            stepperVal.value = current;
+            curLogro.beneficioCantidad = current;
+            chipNoAplica.classList.remove("selected");
+            updateLiveText();
+            saveDraft();
+          });
+
+          stepperVal.addEventListener("input", (e) => {
+            let val = parseInt(e.target.value, 10);
+            if (isNaN(val) || val < 0) val = 0;
+            curLogro.beneficioCantidad = val;
+            chipNoAplica.classList.remove("selected");
+            updateLiveText();
+            saveDraft();
+          });
+
+          chipAprox.addEventListener("click", () => {
+            curLogro.beneficioAproximada = !curLogro.beneficioAproximada;
+            chipAprox.classList.toggle("selected", curLogro.beneficioAproximada);
+            updateLiveText();
+            saveDraft();
+          });
+
+          chipNoAplica.addEventListener("click", () => {
+            if (curLogro.beneficioCantidad === -1) {
+              curLogro.beneficioCantidad = 0;
+              stepperVal.value = 0;
+              chipNoAplica.classList.remove("selected");
+            } else {
+              curLogro.beneficioCantidad = -1;
+              stepperVal.value = 0;
+              chipNoAplica.classList.add("selected");
+            }
+            updateLiveText();
+            saveDraft();
+          });
+
+          // Unidad chips
+          document.querySelectorAll("[data-unit]").forEach(btn => {
+            btn.addEventListener("click", () => {
+              const u = btn.getAttribute("data-unit");
+              curLogro.beneficioUnidad = u;
+              document.querySelectorAll("[data-unit]").forEach(b => b.classList.remove("selected"));
+              btn.classList.add("selected");
+              updateLiveText();
+              saveDraft();
+            });
+          });
+
+          // Faces
+          document.querySelectorAll("[data-face-id]").forEach(f => {
+            f.addEventListener("click", () => {
+              const fid = f.getAttribute("data-face-id");
+              if (curLogro.certeza === fid) {
+                curLogro.certeza = "";
+                f.classList.remove("selected");
+              } else {
+                curLogro.certeza = fid;
+                document.querySelectorAll("[data-face-id]").forEach(x => x.classList.remove("selected"));
+                f.classList.add("selected");
+              }
+              saveDraft();
+            });
+          });
+
+          // Docs chips
+          const docOtroWrapper = document.getElementById("doc-otro-wrapper");
+          const inputDocOtro = document.getElementById("input-doc-otro");
+
+          document.querySelectorAll("[data-doc-id]").forEach(btn => {
+            btn.addEventListener("click", () => {
+              const docId = btn.getAttribute("data-doc-id");
+              if (docId === "ninguno") {
+                curLogro.documentos = ["ninguno"];
+                document.querySelectorAll("[data-doc-id]").forEach(b => {
+                  b.classList.toggle("selected", b.getAttribute("data-doc-id") === "ninguno");
+                });
+                docOtroWrapper.style.display = "none";
+              } else {
+                // Quita ninguno si estaba
+                curLogro.documentos = curLogro.documentos.filter(d => d !== "ninguno");
+                const nBtn = document.querySelector('[data-doc-id="ninguno"]');
+                if (nBtn) nBtn.classList.remove("selected");
+
+                const idx = curLogro.documentos.indexOf(docId);
+                if (idx > -1) {
+                  curLogro.documentos.splice(idx, 1);
+                  btn.classList.remove("selected");
+                } else {
+                  curLogro.documentos.push(docId);
+                  btn.classList.add("selected");
+                }
+
+                docOtroWrapper.style.display = curLogro.documentos.includes("otro") ? "block" : "none";
+              }
+              saveDraft();
+            });
+          });
+
+          if (inputDocOtro) {
+            inputDocOtro.addEventListener("input", (e) => {
+              curLogro.documentosOtro = e.target.value.trim();
+              saveDraft();
+            });
+          }
+        },
+        isValid: () => true // Opcional con salto
+      },
+
+      /* SECCIÓN B: PANTALLA B3 */
+      {
+        id: "B3",
+        section: "B",
+        sectionLabel: "B · Logros 🏆",
+        render: () => {
+          const n = activeLogroIndex + 1;
+          const curLogro = getOrCreateCurrentLogro();
+
+          const publicoCards = [
+            { id: "si", label: "🟢 Sí, ya es público", cls: "traffic-green" },
+            { id: "tramite", label: "🟡 En trámite", cls: "traffic-yellow" },
+            { id: "no", label: "🔴 No todavía", cls: "traffic-red" }
+          ];
+
+          const signChips = [
+            { id: "precedente", label: "🧭 Sienta precedente" },
+            { id: "victimas", label: "💛 Impacto en víctimas" },
+            { id: "reconocimiento", label: "🙏 Reconocimiento de responsabilidad" },
+            { id: "otro", label: "✏️ Otro" }
+          ];
+
+          const wordCount = getWordCount(curLogro.significadoTexto || "");
+          const counterClass = wordCount > 25 ? "exceeded" : wordCount >= 22 ? "warning" : "";
+          const showWarning = curLogro.publico === "tramite" || curLogro.publico === "no";
+
+          return `
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+              <h2 class="survey-title" style="margin-bottom: 0;">Difusión y Significado 🧭</h2>
+              <span style="font-family: 'Fredoka'; font-weight: 700; color: var(--purple); font-size: 0.95rem;">Logro ${n} de 3</span>
+            </div>
+            <p class="survey-subtitle">7. ¿El logro ya es público?</p>
+
+            <div class="question-block">
+              <div class="options-grid">
+                ${publicoCards.map(p => {
+                  const isSel = curLogro.publico === p.id;
+                  return `
+                    <div class="option-card ${p.cls} ${isSel ? 'selected' : ''}" data-publico-id="${p.id}" role="radio" aria-checked="${isSel}">
+                      <div class="option-card-content">
+                        <span>${p.label}</span>
+                      </div>
+                      <div class="indicator-circle"></div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+
+              <div id="notice-tramite-no" class="notice-callout" style="display: ${showWarning ? 'flex' : 'none'};">
+                <span>🔒</span>
+                <span>Gracias. Lo marcaremos como no publicable hasta que lo confirmes.</span>
+              </div>
+            </div>
+
+            <div class="question-block" style="margin-top: 20px;">
+              <label class="question-label">8. ¿Qué hace que este logro sea significativo?</label>
+              <div class="chips-wrapper" style="margin-bottom: 12px;">
+                ${signChips.map(s => {
+                  const isSel = curLogro.significado.includes(s.id);
+                  return `<button type="button" class="chip ${isSel ? 'selected' : ''}" data-sign-id="${s.id}">${s.label}</button>`;
+                }).join('')}
+              </div>
+
+              <div id="sign-otro-wrapper" class="expandable-field" style="display: ${curLogro.significado.includes('otro') ? 'block' : 'none'}; margin-bottom: 12px;">
+                <input type="text" id="input-sign-otro" class="input-text" placeholder="¿Qué otro aspecto lo hace significativo?..." value="${escapeHtml(curLogro.significadoOtro || '')}" />
+              </div>
+
+              <div class="textarea-wrapper">
+                <textarea id="textarea-sign-desc" class="textarea-field" style="min-height: 80px;" placeholder="Cuéntanos en pocas palabras qué lo hace especial (máximo 25 palabras)...">${escapeHtml(curLogro.significadoTexto || '')}</textarea>
+                <div id="sign-word-counter" class="word-counter ${counterClass}">${wordCount}/25</div>
+              </div>
+            </div>
+
+            <div class="card-footer-notice">
+              Información de uso interno de la CCJ. No incluyas nombres de víctimas individuales.
+            </div>
+          `;
+        },
+        attachHandlers: () => {
+          const curLogro = getOrCreateCurrentLogro();
+          const noticeEl = document.getElementById("notice-tramite-no");
+
+          document.querySelectorAll("[data-publico-id]").forEach(card => {
+            card.addEventListener("click", () => {
+              const pid = card.getAttribute("data-publico-id");
+              curLogro.publico = pid;
+              document.querySelectorAll("[data-publico-id]").forEach(c => {
+                c.classList.remove("selected");
+                c.setAttribute("aria-checked", "false");
+              });
+              card.classList.add("selected");
+              card.setAttribute("aria-checked", "true");
+
+              if (pid === "tramite" || pid === "no") {
+                noticeEl.style.display = "flex";
+              } else {
+                noticeEl.style.display = "none";
+              }
+              saveDraft();
+              updateBottomBar();
+            });
+          });
+
+          // Chips significado
+          const otroSignWrapper = document.getElementById("sign-otro-wrapper");
+          const inputSignOtro = document.getElementById("input-sign-otro");
+
+          document.querySelectorAll("[data-sign-id]").forEach(chip => {
+            chip.addEventListener("click", () => {
+              const sid = chip.getAttribute("data-sign-id");
+              const idx = curLogro.significado.indexOf(sid);
+              if (idx > -1) {
+                curLogro.significado.splice(idx, 1);
+                chip.classList.remove("selected");
+              } else {
+                curLogro.significado.push(sid);
+                chip.classList.add("selected");
+              }
+
+              otroSignWrapper.style.display = curLogro.significado.includes("otro") ? "block" : "none";
+              saveDraft();
+            });
+          });
+
+          if (inputSignOtro) {
+            inputSignOtro.addEventListener("input", (e) => {
+              curLogro.significadoOtro = e.target.value.trim();
+              saveDraft();
+            });
+          }
+
+          // Textarea significado
+          const signTextarea = document.getElementById("textarea-sign-desc");
+          const signCounter = document.getElementById("sign-word-counter");
+
+          signTextarea.addEventListener("input", (e) => {
+            curLogro.significadoTexto = e.target.value;
+            const count = getWordCount(curLogro.significadoTexto);
+            signCounter.textContent = `${count}/25`;
+            signCounter.className = `word-counter ${count > 25 ? "exceeded" : count >= 22 ? "warning" : ""}`;
+            saveDraft();
+            updateBottomBar();
+          });
+        },
+        isValid: () => {
+          const curLogro = getOrCreateCurrentLogro();
+          const count = getWordCount(curLogro.significadoTexto || "");
+          if (count > 25) return false;
+          // Para logro 1, saber si es público es obligatorio
+          if (activeLogroIndex === 0 && !curLogro.publico) return false;
+          return true;
+        }
+      },
+
+      /* SECCIÓN B: INTERSTITIAL "¿Quieres agregar otro logro?" */
+      {
+        id: "B_interstitial",
+        section: "B",
+        sectionLabel: "B · Logros 🏆",
+        render: () => {
+          const n = activeLogroIndex + 1;
+          const isMax = n >= 3;
+          return `
+            <div style="text-align: center; padding: 24px 0;">
+              <div style="font-size: 3.5rem; margin-bottom: 12px;">🎉</div>
+              <h2 class="survey-title">¡Logro ${n} completado con éxito!</h2>
+              <p class="survey-subtitle" style="max-width: 440px; margin: 0 auto 28px;">
+                ${isMax 
+                  ? "¡Has registrado los 3 logros principales de tu coordinación! Sigamos adelante con la siguiente sección."
+                  : "¿Deseas reportar otro logro importante de tu área antes de continuar?"
+                }
+              </p>
+
+              <div style="display: flex; flex-direction: column; gap: 12px; max-width: 320px; margin: 0 auto;">
+                ${!isMax ? `
+                  <button class="btn-3d btn-3d-sky" id="btn-add-another-logro" style="font-size: 1.15rem;">
+                    ➕ Agregar otro logro (${n + 1} de 3)
+                  </button>
+                ` : ''}
+                <button class="btn-3d btn-3d-primary" id="btn-proceed-section-c" style="font-size: 1.15rem;">
+                  ➡️ Seguir a Sección C
+                </button>
+              </div>
+
+              <div class="card-footer-notice" style="margin-top: 36px;">
+                Información de uso interno de la CCJ. No incluyas nombres de víctimas individuales.
+              </div>
+            </div>
+          `;
+        },
+        attachHandlers: () => {
+          triggerConfetti(1500, 40);
+
+          const btnAdd = document.getElementById("btn-add-another-logro");
+          if (btnAdd) {
+            btnAdd.addEventListener("click", () => {
+              if (activeLogroIndex < 2) {
+                activeLogroIndex++;
+                if (!respuestas.logros[activeLogroIndex]) {
+                  respuestas.logros.push({
+                    descripcion: "",
+                    tipo: [],
+                    tipoOtro: "",
+                    beneficioCantidad: 0,
+                    beneficioUnidad: "Familias",
+                    beneficioAproximada: true,
+                    certeza: "",
+                    documentos: [],
+                    documentosOtro: "",
+                    publico: "",
+                    significado: [],
+                    significadoOtro: "",
+                    significadoTexto: ""
+                  });
+                }
+                saveDraft();
+                goToScreen("B1");
+              }
+            });
+          }
+
+          document.getElementById("btn-proceed-section-c").addEventListener("click", () => {
+            goToScreen("C1");
+          });
+        },
+        isValid: () => true
+      },
+
+      /* SECCIÓN C: AÑOS DE ESPERA POR JUSTICIA ⏳ */
+      {
+        id: "C1",
+        section: "C",
+        sectionLabel: "C · Años de espera ⏳",
+        render: () => {
+          const esp = respuestas.espera;
+          const anios = 2026 - (esp.anioHechos || 2000);
+          const wordCount = getWordCount(esp.caso || "");
+          const counterClass = wordCount > 25 ? "exceeded" : wordCount >= 22 ? "warning" : "";
+
+          return `
+            <h2 class="survey-title">Años de espera por justicia ⏳</h2>
+            <p class="survey-subtitle">Procesos de largo aliento que avanzaron en 2026.</p>
+
+            <div class="question-block">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <label class="question-label" for="input-caso-espera" style="margin-bottom: 0;">9. ¿Qué caso o proceso con más años de espera tuvo un avance en 2026?</label>
+              </div>
+              <div style="margin-bottom: 10px;">
+                <button type="button" class="chip ${!esp.aplica ? 'selected' : ''}" id="chip-no-aplica-espera">No aplica en mi coordinación</button>
+              </div>
+
+              <div id="espera-fields-wrapper" style="display: ${esp.aplica ? 'block' : 'none'};">
+                <div class="textarea-wrapper" style="margin-bottom: 20px;">
+                  <textarea id="input-caso-espera" class="textarea-field" style="min-height: 70px;" placeholder="Describe brevemente el caso o proceso (máximo 25 palabras)...">${escapeHtml(esp.caso || '')}</textarea>
+                  <div id="caso-word-counter" class="word-counter ${counterClass}">${wordCount}/25</div>
+                </div>
+
+                <!-- 10. Slider de año -->
+                <div class="question-block">
+                  <label class="question-label">10. ¿En qué año ocurrieron los hechos?</label>
+                  <div class="slider-box">
+                    <div class="slider-badge" id="slider-live-badge">${esp.anioHechos} → ⏳ ${anios} años de espera</div>
+                    <input type="range" id="slider-anio" class="range-input" min="1980" max="2026" value="${esp.anioHechos || 2000}" />
+                    <div class="slider-labels">
+                      <span>1980</span>
+                      <span>2000</span>
+                      <span>2026</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 11. ¿El caso es público y se puede nombrar? -->
+                <div class="question-block" style="margin-top: 20px;">
+                  <label class="question-label">11. ¿El caso es público y se puede nombrar?</label>
+                  <div class="options-grid">
+                    ${[
+                      { id: "si", label: "✅ Sí" },
+                      { id: "gestion", label: "🕓 En gestión" },
+                      { id: "no", label: "🔒 No" }
+                    ].map(opt => {
+                      const isSel = esp.publicoNombrable === opt.id;
+                      return `
+                        <div class="option-card ${isSel ? 'selected' : ''}" data-nombrable-id="${opt.id}" role="radio" aria-checked="${isSel}">
+                          <div class="option-card-content"><span>${opt.label}</span></div>
+                          <div class="indicator-circle"></div>
+                        </div>
+                      `;
+                    }).join('')}
+                  </div>
+                  <p style="font-size: 0.82rem; color: var(--slate-400); margin-top: 8px;">
+                    Si hay familias, recuerda contar con su consentimiento.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-footer-notice">
+              Información de uso interno de la CCJ. No incluyas nombres de víctimas individuales.
+            </div>
+          `;
+        },
+        attachHandlers: () => {
+          const esp = respuestas.espera;
+          const chipNoAplica = document.getElementById("chip-no-aplica-espera");
+          const wrapper = document.getElementById("espera-fields-wrapper");
+          const casoTextarea = document.getElementById("input-caso-espera");
+          const counter = document.getElementById("caso-word-counter");
+          const slider = document.getElementById("slider-anio");
+          const badge = document.getElementById("slider-live-badge");
+
+          chipNoAplica.addEventListener("click", () => {
+            esp.aplica = !esp.aplica;
+            chipNoAplica.classList.toggle("selected", !esp.aplica);
+            wrapper.style.display = esp.aplica ? "block" : "none";
+            saveDraft();
+            updateBottomBar();
+          });
+
+          if (casoTextarea) {
+            casoTextarea.addEventListener("input", (e) => {
+              esp.caso = e.target.value;
+              const c = getWordCount(esp.caso);
+              counter.textContent = `${c}/25`;
+              counter.className = `word-counter ${c > 25 ? "exceeded" : c >= 22 ? "warning" : ""}`;
+              saveDraft();
+              updateBottomBar();
+            });
+          }
+
+          if (slider) {
+            slider.addEventListener("input", (e) => {
+              const year = parseInt(e.target.value, 10);
+              esp.anioHechos = year;
+              esp.aniosEspera = 2026 - year;
+              badge.textContent = `${year} → ⏳ ${esp.aniosEspera} años de espera`;
+              saveDraft();
+            });
+          }
+
+          document.querySelectorAll("[data-nombrable-id]").forEach(card => {
+            card.addEventListener("click", () => {
+              const nid = card.getAttribute("data-nombrable-id");
+              esp.publicoNombrable = nid;
+              document.querySelectorAll("[data-nombrable-id]").forEach(c => {
+                c.classList.remove("selected");
+                c.setAttribute("aria-checked", "false");
+              });
+              card.classList.add("selected");
+              card.setAttribute("aria-checked", "true");
+              saveDraft();
+              updateBottomBar();
+            });
+          });
+        },
+        isValid: () => {
+          const esp = respuestas.espera;
+          if (!esp.aplica) return true;
+          const c = getWordCount(esp.caso || "");
+          if (c > 25) return false;
+          return true;
+        }
+      },
+
+      /* SECCIÓN D: TEMAS MÁS TRABAJADOS (D1) */
+      {
+        id: "D1",
+        section: "D",
+        sectionLabel: "D · Temas 📚",
+        render: () => {
+          const temasList = [
+            { id: "defensores", label: "Personas defensoras y liderazgos", emoji: "🛡️" },
+            { id: "jep_transicional", label: "Justicia transicional y JEP", emoji: "🕊️" },
+            { id: "ejecuciones", label: "Ejecuciones extrajudiciales", emoji: "⚖️" },
+            { id: "desaparicion", label: "Desaparición forzada", emoji: "🕯️" },
+            { id: "tierras", label: "Tierras y territorio", emoji: "🌾" },
+            { id: "protesta", label: "Protesta social", emoji: "✊" },
+            { id: "genero", label: "Género", emoji: "💜" },
+            { id: "ambiental", label: "Justicia ambiental", emoji: "🌿" },
+            { id: "memoria", label: "Memoria", emoji: "🧵" },
+            { id: "policial", label: "Reforma policial", emoji: "👮" },
+            { id: "otro", label: "Otro", emoji: "✏️" }
+          ];
+
+          const nTemas = respuestas.temas.lista.length;
+
+          return `
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+              <h2 class="survey-title" style="margin-bottom: 0;">Temas más trabajados 📚</h2>
+              <span id="temas-count-badge" style="font-family: 'Fredoka'; font-weight: 700; color: var(--purple); font-size: 0.95rem;">Llevas ${nTemas} temas ${nTemas > 0 ? '✅' : ''}</span>
+            </div>
+            <p class="survey-subtitle">12. Marque los temas en los que trabajó su coordinación este año.</p>
+
+            <div class="question-block">
+              <div class="options-grid">
+                ${temasList.map(t => {
+                  const isSel = respuestas.temas.lista.includes(t.id);
+                  return `
+                    <div class="option-card ${isSel ? 'selected' : ''}" data-tema-id="${t.id}" role="checkbox" aria-checked="${isSel}">
+                      <div class="option-card-content">
+                        <span class="option-emoji">${t.emoji}</span>
+                        <span>${t.label}</span>
+                      </div>
+                      <div class="indicator-square">
+                        <span class="indicator-square-icon">✓</span>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+
+              <div id="tema-otro-wrapper" class="expandable-field" style="display: ${respuestas.temas.lista.includes('otro') ? 'block' : 'none'};">
+                <input type="text" id="input-tema-otro" class="input-text" placeholder="¿Cuál otro tema trabajaron?..." value="${escapeHtml(respuestas.temas.otro || '')}" />
+              </div>
+            </div>
+
+            <div class="card-footer-notice">
+              Información de uso interno de la CCJ. No incluyas nombres de víctimas individuales.
+            </div>
+          `;
+        },
+        attachHandlers: () => {
+          const cards = document.querySelectorAll("[data-tema-id]");
+          const otroWrapper = document.getElementById("tema-otro-wrapper");
+          const inputOtro = document.getElementById("input-tema-otro");
+          const badge = document.getElementById("temas-count-badge");
+
+          cards.forEach(card => {
+            card.addEventListener("click", () => {
+              const tid = card.getAttribute("data-tema-id");
+              const idx = respuestas.temas.lista.indexOf(tid);
+              if (idx > -1) {
+                respuestas.temas.lista.splice(idx, 1);
+                card.classList.remove("selected");
+                card.setAttribute("aria-checked", "false");
+              } else {
+                respuestas.temas.lista.push(tid);
+                card.classList.add("selected");
+                card.setAttribute("aria-checked", "true");
+              }
+
+              otroWrapper.style.display = respuestas.temas.lista.includes("otro") ? "block" : "none";
+              const count = respuestas.temas.lista.length;
+              badge.textContent = `Llevas ${count} temas ${count > 0 ? '✅' : ''}`;
+              saveDraft();
+              updateBottomBar();
+            });
+          });
+
+          if (inputOtro) {
+            inputOtro.addEventListener("input", (e) => {
+              respuestas.temas.otro = e.target.value.trim();
+              saveDraft();
+              updateBottomBar();
+            });
+          }
+        },
+        isValid: () => {
+          if (respuestas.temas.lista.length === 0) return false;
+          if (respuestas.temas.lista.includes("otro") && (!respuestas.temas.otro || respuestas.temas.otro.trim() === "")) return false;
+          return true;
+        }
+      },
+
+      /* SECCIÓN D: PRIORIZACIÓN DE TEMAS (D2) */
+      {
+        id: "D2",
+        section: "D",
+        sectionLabel: "D · Temas 📚",
+        render: () => {
+          const elegidos = respuestas.temas.lista;
+          // Mapa de etiquetas
+          const temaLabels = {
+            defensores: "🛡️ Personas defensoras",
+            jep_transicional: "🕊️ Justicia transicional y JEP",
+            ejecuciones: "⚖️ Ejecuciones extrajudiciales",
+            desaparicion: "🕯️ Desaparición forzada",
+            tierras: "🌾 Tierras y territorio",
+            protesta: "✊ Protesta social",
+            genero: "💜 Género",
+            ambiental: "🌿 Justicia ambiental",
+            memoria: "🧵 Memoria",
+            policial: "👮 Reforma policial",
+            otro: `✏️ ${respuestas.temas.otro || 'Otro'}`
+          };
+
+          // Si solo hay uno seleccionado, preselecciona en masTiempo
+          if (elegidos.length === 1 && !respuestas.temas.masTiempo) {
+            respuestas.temas.masTiempo = elegidos[0];
+          }
+
+          return `
+            <h2 class="survey-title">Profundidad y Crecimiento 📈</h2>
+            <p class="survey-subtitle">Sobre los temas que seleccionaste en la pantalla anterior.</p>
+
+            <div class="question-block">
+              <label class="question-label">13. ¿Cuál fue el tema que más tiempo del equipo consumió?</label>
+              <div class="options-grid">
+                ${elegidos.map(tid => {
+                  const isSel = respuestas.temas.masTiempo === tid;
+                  return `
+                    <div class="option-card ${isSel ? 'selected' : ''}" data-mastiempo-id="${tid}" role="radio" aria-checked="${isSel}">
+                      <div class="option-card-content">
+                        <span>${temaLabels[tid] || tid}</span>
+                      </div>
+                      <div class="indicator-circle"></div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
+            <div class="question-block" style="margin-top: 24px;">
+              <label class="question-label">14. ¿Qué tema creció o apareció por primera vez este año?</label>
+              <div class="options-grid">
+                ${elegidos.map(tid => {
+                  const isSel = respuestas.temas.creciente === tid;
+                  return `
+                    <div class="option-card ${isSel ? 'selected' : ''}" data-creciente-id="${tid}" role="radio" aria-checked="${isSel}">
+                      <div class="option-card-content">
+                        <span>${temaLabels[tid] || tid}</span>
+                      </div>
+                      <div class="indicator-circle"></div>
+                    </div>
+                  `;
+                }).join('')}
+                <div class="option-card ${respuestas.temas.creciente === 'ninguno' ? 'selected' : ''}" data-creciente-id="ninguno" role="radio" aria-checked="${respuestas.temas.creciente === 'ninguno'}">
+                  <div class="option-card-content">
+                    <span>➖ Ninguno nuevo</span>
+                  </div>
+                  <div class="indicator-circle"></div>
+                </div>
+              </div>
+
+              <!-- Botones: Apareció este año / Creció -->
+              <div id="creciente-suboptions" class="expandable-field" style="display: ${(respuestas.temas.creciente && respuestas.temas.creciente !== 'ninguno') ? 'flex' : 'none'}; gap: 10px; margin-top: 12px;">
+                <button type="button" class="chip ${respuestas.temas.crecienteTipo === 'aparecio' ? 'selected' : ''}" id="btn-creciente-aparecio" style="flex: 1; justify-content: center;">
+                  🌱 Apareció este año
+                </button>
+                <button type="button" class="chip ${respuestas.temas.crecienteTipo === 'crecio' ? 'selected' : ''}" id="btn-creciente-crecio" style="flex: 1; justify-content: center;">
+                  📈 Creció
+                </button>
+              </div>
+            </div>
+
+            <div class="card-footer-notice">
+              Información de uso interno de la CCJ. No incluyas nombres de víctimas individuales.
+            </div>
+          `;
+        },
+        attachHandlers: () => {
+          // masTiempo
+          document.querySelectorAll("[data-mastiempo-id]").forEach(card => {
+            card.addEventListener("click", () => {
+              const tid = card.getAttribute("data-mastiempo-id");
+              respuestas.temas.masTiempo = tid;
+              document.querySelectorAll("[data-mastiempo-id]").forEach(c => {
+                c.classList.remove("selected");
+                c.setAttribute("aria-checked", "false");
+              });
+              card.classList.add("selected");
+              card.setAttribute("aria-checked", "true");
+              saveDraft();
+              updateBottomBar();
+            });
+          });
+
+          // creciente
+          const subopts = document.getElementById("creciente-suboptions");
+          const btnAparecio = document.getElementById("btn-creciente-aparecio");
+          const btnCrecio = document.getElementById("btn-creciente-crecio");
+
+          document.querySelectorAll("[data-creciente-id]").forEach(card => {
+            card.addEventListener("click", () => {
+              const tid = card.getAttribute("data-creciente-id");
+              respuestas.temas.creciente = tid;
+              document.querySelectorAll("[data-creciente-id]").forEach(c => {
+                c.classList.remove("selected");
+                c.setAttribute("aria-checked", "false");
+              });
+              card.classList.add("selected");
+              card.setAttribute("aria-checked", "true");
+
+              if (tid === "ninguno") {
+                subopts.style.display = "none";
+                respuestas.temas.crecienteTipo = "ninguno";
+              } else {
+                subopts.style.display = "flex";
+                if (respuestas.temas.crecienteTipo === "ninguno") {
+                  respuestas.temas.crecienteTipo = "crecio";
+                  btnCrecio.classList.add("selected");
+                  btnAparecio.classList.remove("selected");
+                }
+              }
+              saveDraft();
+              updateBottomBar();
+            });
+          });
+
+          if (btnAparecio && btnCrecio) {
+            btnAparecio.addEventListener("click", () => {
+              respuestas.temas.crecienteTipo = "aparecio";
+              btnAparecio.classList.add("selected");
+              btnCrecio.classList.remove("selected");
+              saveDraft();
+            });
+            btnCrecio.addEventListener("click", () => {
+              respuestas.temas.crecienteTipo = "crecio";
+              btnCrecio.classList.add("selected");
+              btnAparecio.classList.remove("selected");
+              saveDraft();
+            });
+          }
+        },
+        isValid: () => true
+      },
+
+      /* SECCIÓN E: ESCENARIOS DE INCIDENCIA 🏟️ */
+      {
+        id: "E1",
+        section: "E",
+        sectionLabel: "E · Escenarios 🏟️",
+        render: () => {
+          // Ordenamiento contextual según la coordinación en A1
+          let allChips = [
+            { id: "onu", label: "🌐 ONU" },
+            { id: "cidh", label: "🌎 CIDH" },
+            { id: "corte_idh", label: "⚖️ Corte IDH" },
+            { id: "jep", label: "🕊️ JEP" },
+            { id: "corte_constitucional", label: "📜 Corte Constitucional" },
+            { id: "consejo_estado", label: "🧑‍⚖️ Consejo de Estado" },
+            { id: "congreso", label: "🗳️ Congreso" },
+            { id: "otro", label: "✏️ Otro" }
+          ];
+
+          const coord = respuestas.coordinacion || "";
+          if (coord === "incidencia_internacional" || coord === "litigio_internacional") {
+            const priority = ["onu", "cidh", "corte_idh"];
+            allChips.sort((a, b) => {
+              const aP = priority.indexOf(a.id);
+              const bP = priority.indexOf(b.id);
+              if (aP > -1 && bP === -1) return -1;
+              if (bP > -1 && aP === -1) return 1;
+              return 0;
+            });
+          } else if (coord === "incidencia_nacional") {
+            const priority = ["congreso", "corte_constitucional", "consejo_estado"];
+            allChips.sort((a, b) => {
+              const aP = priority.indexOf(a.id);
+              const bP = priority.indexOf(b.id);
+              if (aP > -1 && bP === -1) return -1;
+              if (bP > -1 && aP === -1) return 1;
+              return 0;
+            });
+          } else if (coord === "litigio_penal" || coord === "jep") {
+            const priority = ["jep", "corte_constitucional"];
+            allChips.sort((a, b) => {
+              const aP = priority.indexOf(a.id);
+              const bP = priority.indexOf(b.id);
+              if (aP > -1 && bP === -1) return -1;
+              if (bP > -1 && aP === -1) return 1;
+              return 0;
+            });
+          }
+
+          return `
+            <h2 class="survey-title">Escenarios de Incidencia 🏟️</h2>
+            <p class="survey-subtitle">15. ¿En qué escenarios intervino su coordinación este año?</p>
+
+            <div class="question-block">
+              <div class="chips-wrapper" style="gap: 10px;">
+                ${allChips.map(c => {
+                  const isSel = respuestas.escenarios.lista.includes(c.id);
+                  return `<button type="button" class="chip ${isSel ? 'selected' : ''}" data-esc-id="${c.id}" style="font-size: 1rem; padding: 10px 18px;">${c.label}</button>`;
+                }).join('')}
+              </div>
+
+              <div id="escenario-otro-wrapper" class="expandable-field" style="display: ${respuestas.escenarios.lista.includes('otro') ? 'block' : 'none'}; margin-top: 14px;">
+                <input type="text" id="input-escenario-otro" class="input-text" placeholder="¿En qué otro escenario intervinieron?..." value="${escapeHtml(respuestas.escenarios.otro || '')}" />
+              </div>
+            </div>
+
+            <div class="card-footer-notice">
+              Información de uso interno de la CCJ. No incluyas nombres de víctimas individuales.
+            </div>
+          `;
+        },
+        attachHandlers: () => {
+          const chips = document.querySelectorAll("[data-esc-id]");
+          const otroWrapper = document.getElementById("escenario-otro-wrapper");
+          const inputOtro = document.getElementById("input-escenario-otro");
+
+          chips.forEach(chip => {
+            chip.addEventListener("click", () => {
+              const eid = chip.getAttribute("data-esc-id");
+              const idx = respuestas.escenarios.lista.indexOf(eid);
+              if (idx > -1) {
+                respuestas.escenarios.lista.splice(idx, 1);
+                chip.classList.remove("selected");
+              } else {
+                respuestas.escenarios.lista.push(eid);
+                chip.classList.add("selected");
+              }
+
+              otroWrapper.style.display = respuestas.escenarios.lista.includes("otro") ? "block" : "none";
+              saveDraft();
+            });
+          });
+
+          if (inputOtro) {
+            inputOtro.addEventListener("input", (e) => {
+              respuestas.escenarios.otro = e.target.value.trim();
+              saveDraft();
+            });
+          }
+        },
+        isValid: () => true
+      },
+
+      /* SECCIÓN F: TERRITORIOS Y COMUNIDADES (F1 - DEPARTAMENTOS) */
+      {
+        id: "F1",
+        section: "F",
+        sectionLabel: "F · Territorios 🗺️",
+        render: () => {
+          const count = respuestas.territorios.departamentos.length;
+
+          return `
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+              <h2 class="survey-title" style="margin-bottom: 0;">Presencia Territorial 🗺️</h2>
+              <span id="dept-live-counter" style="font-family: 'Fredoka'; font-weight: 700; color: var(--purple); font-size: 0.95rem;">🗺️ ${count} departamentos</span>
+            </div>
+            <p class="survey-subtitle">16. ¿En qué departamentos trabajó su coordinación este año?</p>
+
+            <div class="question-block">
+              <div class="search-input-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="dept-search" class="input-text search-input" placeholder="Buscar departamento o Bogotá..." />
+              </div>
+
+              <div class="depts-scroll-box" id="depts-container">
+                ${DEPARTAMENTOS_COLOMBIA.map(dept => {
+                  const isSel = respuestas.territorios.departamentos.includes(dept);
+                  return `<button type="button" class="chip ${isSel ? 'selected' : ''}" data-dept-name="${dept}">${dept}</button>`;
+                }).join('')}
+              </div>
+            </div>
+
+            <div class="card-footer-notice">
+              Información de uso interno de la CCJ. No incluyas nombres de víctimas individuales.
+            </div>
+          `;
+        },
+        attachHandlers: () => {
+          const searchInput = document.getElementById("dept-search");
+          const container = document.getElementById("depts-container");
+          const counter = document.getElementById("dept-live-counter");
+
+          searchInput.addEventListener("input", (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            const chips = container.querySelectorAll("[data-dept-name]");
+            chips.forEach(c => {
+              const name = c.getAttribute("data-dept-name").toLowerCase();
+              c.style.display = name.includes(query) ? "inline-flex" : "none";
+            });
+          });
+
+          container.querySelectorAll("[data-dept-name]").forEach(chip => {
+            chip.addEventListener("click", () => {
+              const name = chip.getAttribute("data-dept-name");
+              const idx = respuestas.territorios.departamentos.indexOf(name);
+              if (idx > -1) {
+                respuestas.territorios.departamentos.splice(idx, 1);
+                chip.classList.remove("selected");
+              } else {
+                respuestas.territorios.departamentos.push(name);
+                chip.classList.add("selected");
+              }
+              const len = respuestas.territorios.departamentos.length;
+              counter.textContent = `🗺️ ${len} departamentos`;
+              saveDraft();
+              updateBottomBar();
+            });
+          });
+        },
+        isValid: () => respuestas.territorios.departamentos.length > 0
+      },
+
+      /* SECCIÓN F: COMUNIDADES Y AUTORIZACIÓN (F2) */
+      {
+        id: "F2",
+        section: "F",
+        sectionLabel: "F · Comunidades 🤝",
+        render: () => {
+          const c = respuestas.territorios.comunidades;
+          const total = (c.campesinas || 0) + (c.indigenas || 0) + (c.afrodescendientes || 0) +
+                        (c.victimas || 0) + (c.mujeres || 0) + (c.otras || 0);
+          respuestas.territorios.totalComunidades = total;
+
+          const comTypes = [
+            { key: "campesinas", label: "Campesinas 🌾" },
+            { key: "indigenas", label: "Pueblos indígenas" },
+            { key: "afrodescendientes", label: "Comunidades afrodescendientes" },
+            { key: "victimas", label: "Víctimas 🕯️" },
+            { key: "mujeres", label: "De mujeres 💜" },
+            { key: "otras", label: "Otras" }
+          ];
+
+          const autOptions = [
+            { id: "si", label: "✅ Sí" },
+            { id: "gestion", label: "🕓 En gestión" },
+            { id: "no", label: "🔒 No / prefiero no mencionar ninguna por seguridad" }
+          ];
+
+          return `
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+              <h2 class="survey-title" style="margin-bottom: 0;">Acompañamiento Comunitario 👥</h2>
+              <span id="comunidades-total-badge" style="font-family: 'Fredoka'; font-weight: 700; color: var(--purple); font-size: 0.95rem;">Total: ${total} comunidades u organizaciones 🎉</span>
+            </div>
+            <p class="survey-subtitle">17. ¿Cuántas comunidades, pueblos u organizaciones acompañó? Indique el número y los tipos.</p>
+
+            <div class="question-block">
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                ${comTypes.map(t => {
+                  const val = c[t.key] || 0;
+                  return `
+                    <div style="display: flex; align-items: center; justify-content: space-between; background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: 14px; padding: 8px 14px;">
+                      <span style="font-weight: 700; font-size: 0.95rem; color: var(--slate-700);">${t.label}</span>
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <button type="button" class="stepper-btn" style="width: 36px; height: 36px; font-size: 1.2rem;" data-stepper-type="${t.key}" data-dir="-1">−</button>
+                        <span style="font-family: 'Fredoka'; font-size: 1.25rem; font-weight: 700; min-width: 32px; text-align: center;" id="val-${t.key}">${val}</span>
+                        <button type="button" class="stepper-btn" style="width: 36px; height: 36px; font-size: 1.2rem;" data-stepper-type="${t.key}" data-dir="1">+</button>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+
+              <div id="otras-comunidades-wrapper" class="expandable-field" style="display: ${(c.otras || 0) > 0 ? 'block' : 'none'}; margin-top: 10px;">
+                <input type="text" id="input-otras-comunidades" class="input-text" placeholder="¿Qué otros tipos de comunidades u organizaciones?..." value="${escapeHtml(c.otrasNombre || '')}" />
+              </div>
+            </div>
+
+            <!-- 18. Autorización de mención -->
+            <div class="question-block" style="margin-top: 24px;">
+              <label class="question-label">18. ¿Existe autorización para mencionar públicamente a alguna comunidad u organización?</label>
+              <div class="options-grid">
+                ${autOptions.map(opt => {
+                  const isSel = respuestas.territorios.autorizacionMencion === opt.id;
+                  return `
+                    <div class="option-card ${isSel ? 'selected' : ''}" data-aut-id="${opt.id}" role="radio" aria-checked="${isSel}">
+                      <div class="option-card-content">
+                        <span>${opt.label}</span>
+                      </div>
+                      <div class="indicator-circle"></div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+
+              <!-- Si elige Sí: tags para nombres -->
+              <div id="aut-nombres-wrapper" class="expandable-field" style="display: ${respuestas.territorios.autorizacionMencion === 'si' ? 'block' : 'none'}; margin-top: 12px;">
+                <label style="font-size: 0.88rem; font-weight: 700; color: var(--slate-600); display: block; margin-bottom: 6px;">Escribe el nombre y presiona Enter o "Agregar":</label>
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                  <input type="text" id="input-nombre-comunidad" class="input-text" placeholder="Ej. Consejo Comunitario de La Larga Tumaradó..." />
+                  <button type="button" class="btn-3d btn-3d-sky" id="btn-add-comunidad-tag" style="padding: 10px 18px; font-size: 0.95rem;">+ Agregar</button>
+                </div>
+                <div class="chips-wrapper" id="comunidades-tags-container">
+                  ${(respuestas.territorios.comunidadesAutorizadas || []).map((name, i) => `
+                    <span class="chip selected" style="font-size: 0.88rem;">
+                      ${escapeHtml(name)}
+                      <span class="remove-tag" data-com-idx="${i}" style="cursor: pointer; font-weight: 900; margin-left: 4px;">✕</span>
+                    </span>
+                  `).join('')}
+                </div>
+              </div>
+
+              <p style="font-size: 0.82rem; color: var(--slate-400); margin-top: 8px;">
+                Esta información es solo de uso interno hasta que se valide.
+              </p>
+            </div>
+
+            <div class="card-footer-notice">
+              Información de uso interno de la CCJ. No incluyas nombres de víctimas individuales.
+            </div>
+          `;
+        },
+        attachHandlers: () => {
+          const c = respuestas.territorios.comunidades;
+          const badge = document.getElementById("comunidades-total-badge");
+          const otrasWrapper = document.getElementById("otras-comunidades-wrapper");
+          const inputOtras = document.getElementById("input-otras-comunidades");
+
+          function recalculateTotal() {
+            const tot = (c.campesinas || 0) + (c.indigenas || 0) + (c.afrodescendientes || 0) +
+                        (c.victimas || 0) + (c.mujeres || 0) + (c.otras || 0);
+            respuestas.territorios.totalComunidades = tot;
+            badge.textContent = `Total: ${tot} comunidades u organizaciones 🎉`;
+            saveDraft();
+          }
+
+          document.querySelectorAll("[data-stepper-type]").forEach(btn => {
+            btn.addEventListener("click", () => {
+              const type = btn.getAttribute("data-stepper-type");
+              const dir = parseInt(btn.getAttribute("data-dir"), 10);
+              c[type] = Math.max(0, (c[type] || 0) + dir);
+              document.getElementById(`val-${type}`).textContent = c[type];
+              if (type === "otras") {
+                otrasWrapper.style.display = c.otras > 0 ? "block" : "none";
+              }
+              recalculateTotal();
+            });
+          });
+
+          if (inputOtras) {
+            inputOtras.addEventListener("input", (e) => {
+              c.otrasNombre = e.target.value.trim();
+              saveDraft();
+            });
+          }
+
+          // Autorización cards
+          const autWrapper = document.getElementById("aut-nombres-wrapper");
+          document.querySelectorAll("[data-aut-id]").forEach(card => {
+            card.addEventListener("click", () => {
+              const aid = card.getAttribute("data-aut-id");
+              respuestas.territorios.autorizacionMencion = aid;
+              document.querySelectorAll("[data-aut-id]").forEach(x => {
+                x.classList.remove("selected");
+                x.setAttribute("aria-checked", "false");
+              });
+              card.classList.add("selected");
+              card.setAttribute("aria-checked", "true");
+              autWrapper.style.display = aid === "si" ? "block" : "none";
+              saveDraft();
+              updateBottomBar();
+            });
+          });
+
+          // Tag input
+          const tagInput = document.getElementById("input-nombre-comunidad");
+          const tagBtn = document.getElementById("btn-add-comunidad-tag");
+          const tagsContainer = document.getElementById("comunidades-tags-container");
+
+          function addComunidadTag() {
+            const val = tagInput.value.trim();
+            if (!val) return;
+            if (!respuestas.territorios.comunidadesAutorizadas) {
+              respuestas.territorios.comunidadesAutorizadas = [];
+            }
+            respuestas.territorios.comunidadesAutorizadas.push(val);
+            tagInput.value = "";
+            renderComunidadTags();
+            saveDraft();
+          }
+
+          function renderComunidadTags() {
+            tagsContainer.innerHTML = (respuestas.territorios.comunidadesAutorizadas || []).map((name, i) => `
+              <span class="chip selected" style="font-size: 0.88rem;">
+                ${escapeHtml(name)}
+                <span class="remove-tag" data-com-idx="${i}" style="cursor: pointer; font-weight: 900; margin-left: 4px;">✕</span>
+              </span>
+            `).join('');
+
+            tagsContainer.querySelectorAll(".remove-tag").forEach(rt => {
+              rt.addEventListener("click", (e) => {
+                const idx = parseInt(e.target.getAttribute("data-com-idx"), 10);
+                respuestas.territorios.comunidadesAutorizadas.splice(idx, 1);
+                renderComunidadTags();
+                saveDraft();
+              });
+            });
+          }
+
+          if (tagBtn && tagInput) {
+            tagBtn.addEventListener("click", addComunidadTag);
+            tagInput.addEventListener("keydown", (e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                addComunidadTag();
+              }
+            });
+          }
+
+          renderComunidadTags();
+        },
+        isValid: () => {
+          return !!respuestas.territorios.autorizacionMencion;
+        }
+      },
+
+      /* SECCIÓN G: PUBLICACIONES Y PRODUCTOS (G1) */
+      {
+        id: "G1",
+        section: "G",
+        sectionLabel: "G · Publicaciones 📰",
+        render: () => {
+          const tipos = [
+            { id: "informes", label: "📊 Informes" },
+            { id: "cartillas", label: "📘 Cartillas" },
+            { id: "boletines", label: "📰 Boletines" },
+            { id: "columnas", label: "✍️ Columnas" },
+            { id: "infografias", label: "🖼️ Infografías" },
+            { id: "otro", label: "✏️ Otro" }
+          ];
+
+          const pubs = respuestas.publicaciones;
+          const totalItems = pubs.items.length;
+
+          return `
+            <h2 class="survey-title">Publicaciones y Productos 📰</h2>
+            <p class="survey-subtitle">19. ¿Qué publicaciones produjo su coordinación en 2026?</p>
+
+            <div class="question-block">
+              <div class="chips-wrapper" style="margin-bottom: 16px;">
+                ${tipos.map(t => {
+                  const isSel = pubs.tipos.includes(t.id);
+                  return `<button type="button" class="chip ${isSel ? 'selected' : ''}" data-pub-tipo="${t.id}">${t.label}</button>`;
+                }).join('')}
+              </div>
+
+              <!-- Listas dinámicas por cada tipo marcado -->
+              <div id="pubs-dynamic-lists">
+                ${pubs.tipos.map(tipoId => {
+                  const label = (tipos.find(x => x.id === tipoId) || {}).label || tipoId;
+                  const itemsOfThisType = pubs.items.filter(it => it.tipo === tipoId);
+
+                  return `
+                    <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: 14px; padding: 12px 14px; margin-bottom: 12px;">
+                      <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 8px; color: var(--slate-800);">${label}</div>
+                      <div id="list-items-${tipoId}">
+                        ${itemsOfThisType.map((it, idx) => `
+                          <div class="dynamic-list-item">
+                            <input type="text" class="input-text pub-item-input" data-tipo="${tipoId}" data-idx="${idx}" placeholder="Título o enlace..." value="${escapeHtml(it.titulo || '')}" />
+                            <button type="button" class="btn-remove-item remove-pub-btn" data-tipo="${tipoId}" data-idx="${idx}" title="Eliminar">✕</button>
+                          </div>
+                        `).join('')}
+                      </div>
+                      <button type="button" class="btn-3d btn-3d-secondary add-pub-btn" data-tipo="${tipoId}" style="font-size: 0.88rem; padding: 6px 14px;">
+                        ➕ Agregar otra
+                      </button>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
+            <!-- Pregunta 20: Si son varias (2 o más), cuáles destacaría con ⭐ -->
+            <div id="pubs-destacadas-wrapper" class="question-block" style="display: ${totalItems >= 2 ? 'block' : 'none'}; margin-top: 24px;">
+              <label class="question-label">20. Si son varias, ¿cuáles destacaría? <span style="font-size: 0.82rem; font-weight: normal; color: var(--slate-400);">(hasta 3 con ⭐)</span></label>
+              <div class="options-grid">
+                ${pubs.items.map((it, i) => {
+                  const title = it.titulo ? it.titulo : `Publicación #${i + 1}`;
+                  const isDest = (pubs.destacadas || []).includes(i);
+                  return `
+                    <div class="option-card ${isDest ? 'selected' : ''}" data-dest-idx="${i}" role="button">
+                      <div class="option-card-content">
+                        <span>${isDest ? '⭐' : '☆'}</span>
+                        <span style="font-size: 0.92rem;">${escapeHtml(title)}</span>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
+            <div class="card-footer-notice">
+              Información de uso interno de la CCJ. No incluyas nombres de víctimas individuales.
+            </div>
+          `;
+        },
+        attachHandlers: () => {
+          const pubs = respuestas.publicaciones;
+
+          // Toggle tipos
+          document.querySelectorAll("[data-pub-tipo]").forEach(btn => {
+            btn.addEventListener("click", () => {
+              const tid = btn.getAttribute("data-pub-tipo");
+              const idx = pubs.tipos.indexOf(tid);
+              if (idx > -1) {
+                pubs.tipos.splice(idx, 1);
+                pubs.items = pubs.items.filter(it => it.tipo !== tid);
+              } else {
+                pubs.tipos.push(tid);
+                pubs.items.push({ tipo: tid, titulo: "" });
+              }
+              saveDraft();
+              goToScreen("G1"); // re-render
+            });
+          });
+
+          // Inputs de títulos
+          document.querySelectorAll(".pub-item-input").forEach(inp => {
+            inp.addEventListener("input", (e) => {
+              const tipo = e.target.getAttribute("data-tipo");
+              const idx = parseInt(e.target.getAttribute("data-idx"), 10);
+              const itemsOfThisType = pubs.items.filter(it => it.tipo === tipo);
+              if (itemsOfThisType[idx]) {
+                itemsOfThisType[idx].titulo = e.target.value;
+              }
+              saveDraft();
+              updateDestacadasView();
+            });
+          });
+
+          // Botones agregar
+          document.querySelectorAll(".add-pub-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+              const tipo = btn.getAttribute("data-tipo");
+              pubs.items.push({ tipo: tipo, titulo: "" });
+              saveDraft();
+              goToScreen("G1");
+            });
+          });
+
+          // Botones eliminar
+          document.querySelectorAll(".remove-pub-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+              const tipo = btn.getAttribute("data-tipo");
+              const idx = parseInt(btn.getAttribute("data-idx"), 10);
+              const itemsOfThisType = pubs.items.filter(it => it.tipo === tipo);
+              const itemToRemove = itemsOfThisType[idx];
+              const overallIdx = pubs.items.indexOf(itemToRemove);
+              if (overallIdx > -1) {
+                pubs.items.splice(overallIdx, 1);
+              }
+              saveDraft();
+              goToScreen("G1");
+            });
+          });
+
+          function updateDestacadasView() {
+            const destWrapper = document.getElementById("pubs-destacadas-wrapper");
+            if (destWrapper) {
+              destWrapper.style.display = pubs.items.length >= 2 ? "block" : "none";
+            }
+          }
+
+          // Seleccionar destacadas con ⭐ (máx 3)
+          document.querySelectorAll("[data-dest-idx]").forEach(card => {
+            card.addEventListener("click", () => {
+              const i = parseInt(card.getAttribute("data-dest-idx"), 10);
+              if (!pubs.destacadas) pubs.destacadas = [];
+              const pos = pubs.destacadas.indexOf(i);
+              if (pos > -1) {
+                pubs.destacadas.splice(pos, 1);
+                card.classList.remove("selected");
+              } else {
+                if (pubs.destacadas.length < 3) {
+                  pubs.destacadas.push(i);
+                  card.classList.add("selected");
+                }
+              }
+              saveDraft();
+            });
+          });
+        },
+        isValid: () => true
+      },
+
+      /* SECCIÓN G: EVENTOS Y MEMORIA (G2) */
+      {
+        id: "G2",
+        section: "G",
+        sectionLabel: "G · Eventos y memoria 🕯️",
+        render: () => {
+          return `
+            <h2 class="survey-title">Eventos y Memoria 🕯️</h2>
+            <p class="survey-subtitle">21. ¿Hay eventos de formación, charlas o encuentros en los que participó que quiera destacar? Indique la fecha y nombre del evento.</p>
+
+            <div class="question-block">
+              <div style="margin-bottom: 12px;">
+                <button type="button" class="chip ${respuestas.sinEventos ? 'selected' : ''}" id="chip-no-eventos">No participamos en eventos</button>
+              </div>
+
+              <div id="eventos-list-wrapper" style="display: ${respuestas.sinEventos ? 'none' : 'block'};">
+                <div id="eventos-dynamic-list">
+                  ${(respuestas.eventos || []).map((ev, i) => `
+                    <div class="dynamic-list-item" style="flex-wrap: wrap;">
+                      <input type="text" class="input-text evento-nombre" data-idx="${i}" placeholder="Nombre del evento..." style="flex: 2; min-width: 180px;" value="${escapeHtml(ev.nombre || '')}" />
+                      <input type="date" class="input-text evento-fecha" data-idx="${i}" style="flex: 1; min-width: 130px;" value="${ev.fecha || ''}" />
+                      <button type="button" class="btn-remove-item remove-evento-btn" data-idx="${i}" title="Eliminar">✕</button>
+                    </div>
+                  `).join('')}
+                </div>
+                <button type="button" class="btn-3d btn-3d-secondary" id="btn-add-evento" style="font-size: 0.88rem; padding: 8px 16px; margin-top: 8px;">
+                  ➕ Agregar otro
+                </button>
+              </div>
+            </div>
+
+            <!-- 22. Actos de memoria -->
+            <div class="question-block" style="margin-top: 28px;">
+              <label class="question-label">22. ¿Hay conmemoraciones o actos de memoria realizados este año?</label>
+              <div class="options-grid grid-2" style="margin-bottom: 12px;">
+                <div class="option-card ${respuestas.memoria.hubo ? 'selected' : ''}" id="opt-memoria-si" role="radio">
+                  <div class="option-card-content"><span>🕯️ Sí</span></div>
+                  <div class="indicator-circle"></div>
+                </div>
+                <div class="option-card ${!respuestas.memoria.hubo ? 'selected' : ''}" id="opt-memoria-no" role="radio">
+                  <div class="option-card-content"><span>➖ No</span></div>
+                  <div class="indicator-circle"></div>
+                </div>
+              </div>
+
+              <div id="memoria-list-wrapper" style="display: ${respuestas.memoria.hubo ? 'block' : 'none'};">
+                <div id="memoria-dynamic-list">
+                  ${(respuestas.memoria.actos || []).map((ac, i) => `
+                    <div class="dynamic-list-item" style="flex-wrap: wrap;">
+                      <input type="text" class="input-text acto-nombre" data-idx="${i}" placeholder="Nombre del acto..." style="flex: 2; min-width: 180px;" value="${escapeHtml(ac.nombre || '')}" />
+                      <input type="date" class="input-text acto-fecha" data-idx="${i}" style="flex: 1; min-width: 130px;" value="${ac.fecha || ''}" />
+                      <button type="button" class="btn-remove-item remove-acto-btn" data-idx="${i}" title="Eliminar">✕</button>
+                    </div>
+                  `).join('')}
+                </div>
+                <button type="button" class="btn-3d btn-3d-secondary" id="btn-add-acto" style="font-size: 0.88rem; padding: 8px 16px; margin-top: 8px;">
+                  ➕ Agregar otro
+                </button>
+              </div>
+            </div>
+
+            <div class="card-footer-notice">
+              Información de uso interno de la CCJ. No incluyas nombres de víctimas individuales.
+            </div>
+          `;
+        },
+        attachHandlers: () => {
+          // Eventos
+          const chipNoEventos = document.getElementById("chip-no-eventos");
+          const wrapperEventos = document.getElementById("eventos-list-wrapper");
+          const btnAddEvento = document.getElementById("btn-add-evento");
+
+          chipNoEventos.addEventListener("click", () => {
+            respuestas.sinEventos = !respuestas.sinEventos;
+            chipNoEventos.classList.toggle("selected", respuestas.sinEventos);
+            wrapperEventos.style.display = respuestas.sinEventos ? "none" : "block";
+            saveDraft();
+          });
+
+          btnAddEvento.addEventListener("click", () => {
+            if (!respuestas.eventos) respuestas.eventos = [];
+            respuestas.eventos.push({ nombre: "", fecha: "" });
+            saveDraft();
+            goToScreen("G2");
+          });
+
+          document.querySelectorAll(".evento-nombre").forEach(inp => {
+            inp.addEventListener("input", (e) => {
+              const i = parseInt(e.target.getAttribute("data-idx"), 10);
+              respuestas.eventos[i].nombre = e.target.value;
+              saveDraft();
+            });
+          });
+          document.querySelectorAll(".evento-fecha").forEach(inp => {
+            inp.addEventListener("change", (e) => {
+              const i = parseInt(e.target.getAttribute("data-idx"), 10);
+              respuestas.eventos[i].fecha = e.target.value;
+              saveDraft();
+            });
+          });
+          document.querySelectorAll(".remove-evento-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+              const i = parseInt(btn.getAttribute("data-idx"), 10);
+              respuestas.eventos.splice(i, 1);
+              saveDraft();
+              goToScreen("G2");
+            });
+          });
+
+          // Memoria
+          const optSi = document.getElementById("opt-memoria-si");
+          const optNo = document.getElementById("opt-memoria-no");
+          const wrapperMemoria = document.getElementById("memoria-list-wrapper");
+          const btnAddActo = document.getElementById("btn-add-acto");
+
+          optSi.addEventListener("click", () => {
+            respuestas.memoria.hubo = true;
+            optSi.classList.add("selected");
+            optNo.classList.remove("selected");
+            wrapperMemoria.style.display = "block";
+            if (!respuestas.memoria.actos || respuestas.memoria.actos.length === 0) {
+              respuestas.memoria.actos = [{ nombre: "", fecha: "" }];
+            }
+            saveDraft();
+            goToScreen("G2");
+          });
+
+          optNo.addEventListener("click", () => {
+            respuestas.memoria.hubo = false;
+            optNo.classList.add("selected");
+            optSi.classList.remove("selected");
+            wrapperMemoria.style.display = "none";
+            saveDraft();
+          });
+
+          if (btnAddActo) {
+            btnAddActo.addEventListener("click", () => {
+              respuestas.memoria.actos.push({ nombre: "", fecha: "" });
+              saveDraft();
+              goToScreen("G2");
+            });
+          }
+
+          document.querySelectorAll(".acto-nombre").forEach(inp => {
+            inp.addEventListener("input", (e) => {
+              const i = parseInt(e.target.getAttribute("data-idx"), 10);
+              respuestas.memoria.actos[i].nombre = e.target.value;
+              saveDraft();
+            });
+          });
+          document.querySelectorAll(".acto-fecha").forEach(inp => {
+            inp.addEventListener("change", (e) => {
+              const i = parseInt(e.target.getAttribute("data-idx"), 10);
+              respuestas.memoria.actos[i].fecha = e.target.value;
+              saveDraft();
+            });
+          });
+          document.querySelectorAll(".remove-acto-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+              const i = parseInt(btn.getAttribute("data-idx"), 10);
+              respuestas.memoria.actos.splice(i, 1);
+              saveDraft();
+              goToScreen("G2");
+            });
+          });
+        },
+        isValid: () => true
+      },
+
+      /* PANTALLA DE RESUMEN DEL AÑO */
+      {
+        id: "summary",
+        section: "Resumen",
+        sectionLabel: "Resumen del año 📊",
+        render: () => {
+          const numLogros = respuestas.logros.filter(l => l.descripcion && l.descripcion.trim()).length;
+          const temaLabels = {
+            defensores: "Defensores",
+            jep_transicional: "Justicia transicional",
+            ejecuciones: "Ejecuciones",
+            desaparicion: "Desaparición forzada",
+            tierras: "Tierras y territorio",
+            protesta: "Protesta social",
+            genero: "Género",
+            ambiental: "Justicia ambiental",
+            memoria: "Memoria",
+            policial: "Reforma policial",
+            otro: respuestas.temas.otro || "Otro"
+          };
+          const temaPrincipal = temaLabels[respuestas.temas.masTiempo] || "No especificado";
+          const numDepts = respuestas.territorios.departamentos.length;
+          const totalComs = respuestas.territorios.totalComunidades || 0;
+          const numPubs = respuestas.publicaciones.items.length;
+
+          return `
+            <div style="text-align: center; margin-bottom: 20px;">
+              <span style="font-size: 2.8rem;">✨</span>
+              <h2 class="survey-title" style="font-size: 1.8rem; margin-bottom: 6px;">Tu Balance 2026 está listo</h2>
+              <p class="survey-subtitle" style="margin-bottom: 16px;">Revisa las cifras clave antes de enviar tus respuestas.</p>
+            </div>
+
+            <!-- Spotify / Duolingo style summary grid -->
+            <div class="summary-grid">
+              <div class="summary-card">
+                <div class="summary-number">🏆 ${numLogros}</div>
+                <div class="summary-card-title">Logros reportados</div>
+              </div>
+              <div class="summary-card">
+                <div class="summary-number" style="font-size: 1.4rem; padding-top: 6px;">⏱️ ${escapeHtml(temaPrincipal)}</div>
+                <div class="summary-card-title">Tema principal</div>
+              </div>
+              <div class="summary-card">
+                <div class="summary-number">🗺️ ${numDepts}</div>
+                <div class="summary-card-title">Departamentos</div>
+              </div>
+              <div class="summary-card">
+                <div class="summary-number">👥 ${totalComs}</div>
+                <div class="summary-card-title">Comunidades</div>
+              </div>
+            </div>
+
+            <div class="summary-card" style="margin-bottom: 20px;">
+              <div class="summary-number">📰 ${numPubs}</div>
+              <div class="summary-card-title">Publicaciones registradas</div>
+            </div>
+
+            <!-- Links para editar secciones -->
+            <div class="edit-sections-list">
+              <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 8px; color: var(--slate-900);">Editar secciones:</div>
+              <div class="edit-section-row">
+                <span>A · Identificación (${escapeHtml(respuestas.nombre || 'Sin nombre')})</span>
+                <button type="button" class="btn-edit-link" data-jump-to="A1">Editar</button>
+              </div>
+              <div class="edit-section-row">
+                <span>B · Logros del año (${numLogros} logros)</span>
+                <button type="button" class="btn-edit-link" data-jump-to="B1">Editar</button>
+              </div>
+              <div class="edit-section-row">
+                <span>C · Años de espera por justicia</span>
+                <button type="button" class="btn-edit-link" data-jump-to="C1">Editar</button>
+              </div>
+              <div class="edit-section-row">
+                <span>D · Temas más trabajados</span>
+                <button type="button" class="btn-edit-link" data-jump-to="D1">Editar</button>
+              </div>
+              <div class="edit-section-row">
+                <span>E · Escenarios de incidencia</span>
+                <button type="button" class="btn-edit-link" data-jump-to="E1">Editar</button>
+              </div>
+              <div class="edit-section-row">
+                <span>F · Territorios y comunidades</span>
+                <button type="button" class="btn-edit-link" data-jump-to="F1">Editar</button>
+              </div>
+              <div class="edit-section-row">
+                <span>G · Publicaciones y eventos</span>
+                <button type="button" class="btn-edit-link" data-jump-to="G1">Editar</button>
+              </div>
+            </div>
+
+            <div id="submission-status-banner" style="display: none; padding: 12px; border-radius: 12px; margin-bottom: 16px; font-weight: 700; text-align: center;"></div>
+
+            <div style="text-align: center; margin-bottom: 12px;">
+              <button class="btn-3d btn-3d-primary" id="btn-submit-all" style="width: 100%; font-size: 1.25rem; padding: 14px;">
+                Enviar ✅
+              </button>
+            </div>
+
+            <div class="card-footer-notice">
+              Información de uso interno de la CCJ. No incluyas nombres de víctimas individuales.
+            </div>
+          `;
+        },
+        attachHandlers: () => {
+          document.querySelectorAll("[data-jump-to]").forEach(btn => {
+            btn.addEventListener("click", () => {
+              const target = btn.getAttribute("data-jump-to");
+              goToScreen(target);
+            });
+          });
+
+          const btnSubmit = document.getElementById("btn-submit-all");
+          const banner = document.getElementById("submission-status-banner");
+
+          btnSubmit.addEventListener("click", async () => {
+            respuestas.enviadoEn = new Date().toISOString();
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = "Enviando… ⏳";
+            banner.style.display = "none";
+
+            // Si WEBHOOK_URL está vacío -> Modo demostración
+            if (!WEBHOOK_URL || WEBHOOK_URL.trim() === "") {
+              console.log("=== MODO DEMOSTRACIÓN: OBJETO RESPUESTAS ===", respuestas);
+              banner.style.display = "block";
+              banner.style.background = "#fef3c7";
+              banner.style.color = "#92400e";
+              banner.style.border = "1px solid #fde68a";
+              banner.innerHTML = "💡 Modo demostración: las respuestas no se enviaron a un servidor externo (guardadas en consola). Finalizando...";
+
+              setTimeout(() => {
+                clearDraft();
+                goToScreen("final");
+              }, 1800);
+              return;
+            }
+
+            // Envío con webhook
+            try {
+              await fetch(WEBHOOK_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify(respuestas)
+              });
+
+              // Con no-cors se considera exitoso si no hay error de red
+              clearDraft();
+              goToScreen("final");
+            } catch (err) {
+              console.error("Error al enviar respuestas:", err);
+              btnSubmit.disabled = false;
+              btnSubmit.textContent = "Enviar ✅";
+              banner.style.display = "block";
+              banner.style.background = "#fee2e2";
+              banner.style.color = "#991b1b";
+              banner.style.border = "1px solid #fecaca";
+              banner.innerHTML = `
+                <div style="margin-bottom: 8px;">❌ Ocurrió un error de red al enviar tus respuestas.</div>
+                <div style="display: flex; gap: 8px; justify-content: center;">
+                  <button type="button" class="btn-3d btn-3d-secondary" id="btn-retry-submit" style="font-size: 0.85rem; padding: 6px 12px;">Reintentar</button>
+                  <button type="button" class="btn-3d btn-3d-sky" id="btn-fallback-download" style="font-size: 0.85rem; padding: 6px 12px;">Descargar copia (JSON)</button>
+                </div>
+              `;
+
+              document.getElementById("btn-retry-submit").addEventListener("click", () => {
+                btnSubmit.click();
+              });
+              document.getElementById("btn-fallback-download").addEventListener("click", () => {
+                downloadResponsesJSON();
+              });
+            }
+          });
+        },
+        isValid: () => true
+      },
+
+      /* PANTALLA FINAL CON LLUVIA DE CONFETI */
+      {
+        id: "final",
+        section: "Final",
+        sectionLabel: "¡Completado! 🎉",
+        render: () => `
+          <div style="text-align: center; padding: 24px 0;">
+            <div style="font-size: 4.5rem; margin-bottom: 12px;">🎊</div>
+            <h1 class="survey-title" style="font-size: 2.2rem; margin-bottom: 12px; color: var(--primary-dark);">
+              ¡Gracias por tus respuestas!
+            </h1>
+            <p class="survey-subtitle" style="font-size: 1.1rem; max-width: 480px; margin: 0 auto 28px;">
+              Tu aporte es fundamental para visibilizar el arduo trabajo y los logros de la Comisión Colombiana de Juristas durante 2026.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 12px; max-width: 320px; margin: 0 auto;">
+              <button class="btn-3d btn-3d-sky" id="btn-download-json" style="font-size: 1.15rem; padding: 14px 20px;">
+                Descargar copia de mis respuestas 📥
+              </button>
+            </div>
+
+            <div class="card-footer-notice" style="margin-top: 40px;">
+              Comisión Colombiana de Juristas · Balance de Gestión 2026
+            </div>
+          </div>
+        `,
+        attachHandlers: () => {
+          triggerConfetti(4000, 150);
+          document.getElementById("btn-download-json").addEventListener("click", () => {
+            downloadResponsesJSON();
+          });
+        },
+        isValid: () => true
+      }
+    ];
+
+    /* Helper: get or create active logro */
+    function getOrCreateCurrentLogro() {
+      if (!respuestas.logros[activeLogroIndex]) {
+        respuestas.logros[activeLogroIndex] = {
+          descripcion: "",
+          tipo: [],
+          tipoOtro: "",
+          beneficioCantidad: 0,
+          beneficioUnidad: "Familias",
+          beneficioAproximada: true,
+          certeza: "",
+          documentos: [],
+          documentosOtro: "",
+          publico: "",
+          significado: [],
+          significadoOtro: "",
+          significadoTexto: ""
+        };
+      }
+      return respuestas.logros[activeLogroIndex];
+    }
+
+    /* Helper: Escape HTML to avoid injection */
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    /* Helper: Download responses as JSON */
+    function downloadResponsesJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(respuestas, null, 2));
+      const downloadAnchor = document.createElement("a");
+      const filename = `balance_ccj_2026_${(respuestas.nombre || 'anonimo').toLowerCase().replace(/\s+/g, '_')}.json`;
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", filename);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    /* ==========================================================================
+       NAVIGATION & PROGRESS CALCULATION
+       ========================================================================== */
+    const ORDERED_FLOW = [
+      "welcome",
+      "A1",
+      "B1",
+      "B2",
+      "B3",
+      "B_interstitial",
+      "C1",
+      "D1",
+      "D2",
+      "E1",
+      "F1",
+      "F2",
+      "G1",
+      "G2",
+      "summary",
+      "final"
+    ];
+
+    function getScreenIndex(id) {
+      return ORDERED_FLOW.indexOf(id);
+    }
+
+    function calculateProgressPercentage() {
+      const idx = getScreenIndex(currentScreenId);
+      if (idx <= 0) return 0;
+      if (currentScreenId === "final") return 100;
+      // Hay 14 pasos activos entre A1 y summary
+      const effectiveIndex = Math.max(1, idx);
+      const totalSteps = ORDERED_FLOW.length - 2; // excluyendo welcome y final
+      const pct = Math.min(100, Math.round((effectiveIndex / totalSteps) * 100));
+      return pct;
+    }
+
+    function getCurrentScreenObj() {
+      return SCREENS.find(s => s.id === currentScreenId) || SCREENS[0];
+    }
+
+    function goToScreen(screenId, direction = "next") {
+      if (isTransitioning) return;
+      isTransitioning = true;
+      transitionDirection = direction;
+
+      const currentObj = getCurrentScreenObj();
+      const nextObj = SCREENS.find(s => s.id === screenId);
+      if (!nextObj) {
+        isTransitioning = false;
+        return;
+      }
+
+      const card = document.getElementById("card-content");
+
+      // Slide out class
+      card.className = "survey-card " + (direction === "next" ? "slide-out-left" : "slide-out-right");
+
+      setTimeout(() => {
+        // Track history
+        if (direction === "next" && currentScreenId !== screenId && currentScreenId !== "welcome") {
+          navigationHistory.push(currentScreenId);
+        }
+
+        currentScreenId = screenId;
+        card.innerHTML = nextObj.render();
+
+        // Slide in class
+        card.className = "survey-card " + (direction === "next" ? "slide-in-right" : "slide-in-left");
+
+        // Attach listeners
+        nextObj.attachHandlers();
+
+        // Update header & bottom bar
+        updateHeaderAndProgress();
+        updateBottomBar();
+        card.scrollTop = 0;
+        saveDraft();
+
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 280);
+      }, 180);
+    }
+
+    function handleNext() {
+      const currentObj = getCurrentScreenObj();
+      if (!currentObj.isValid()) return;
+
+      if (currentScreenId === "welcome") {
+        goToScreen("A1", "next");
+        return;
+      }
+
+      // Flujo de B
+      if (currentScreenId === "B3") {
+        goToScreen("B_interstitial", "next");
+        return;
+      }
+      if (currentScreenId === "B_interstitial") {
+        goToScreen("C1", "next");
+        return;
+      }
+
+      const currentIdx = ORDERED_FLOW.indexOf(currentScreenId);
+      if (currentIdx > -1 && currentIdx < ORDERED_FLOW.length - 1) {
+        const nextId = ORDERED_FLOW[currentIdx + 1];
+        goToScreen(nextId, "next");
+      }
+    }
+
+    function handlePrev() {
+      if (navigationHistory.length > 0) {
+        const prevId = navigationHistory.pop();
+        goToScreen(prevId, "prev");
+      } else {
+        const currentIdx = ORDERED_FLOW.indexOf(currentScreenId);
+        if (currentIdx > 1) {
+          goToScreen(ORDERED_FLOW[currentIdx - 1], "prev");
+        }
+      }
+    }
+
+    function updateHeaderAndProgress() {
+      const header = document.getElementById("main-header");
+      const fill = document.getElementById("progress-fill");
+      const tag = document.getElementById("section-tag");
+
+      if (currentScreenId === "welcome" || currentScreenId === "final") {
+        header.style.display = "none";
+        return;
+      }
+
+      header.style.display = "flex";
+      const currentObj = getCurrentScreenObj();
+      tag.textContent = currentObj.sectionLabel || "CCJ 2026";
+      const pct = calculateProgressPercentage();
+      fill.style.width = `${pct}%`;
+    }
+
+    function updateBottomBar() {
+      const bar = document.getElementById("bottom-bar");
+      const btnPrev = document.getElementById("btn-prev");
+      const btnNext = document.getElementById("btn-next");
+      const btnSkip = document.getElementById("btn-skip");
+
+      if (currentScreenId === "welcome" || currentScreenId === "final" || currentScreenId === "summary") {
+        bar.style.display = "none";
+        return;
+      }
+
+      bar.style.display = "flex";
+
+      // Botón Anterior
+      const idx = ORDERED_FLOW.indexOf(currentScreenId);
+      btnPrev.style.visibility = idx <= 1 ? "hidden" : "visible";
+
+      // Botón Continuar
+      const currentObj = getCurrentScreenObj();
+      const valid = currentObj.isValid();
+      btnNext.disabled = !valid;
+
+      // Pantallas con opción "Saltar"
+      // Campos obligatorios: nombre y coordinación (A1), logro 1 (B1 y B3 en logro 0), al menos 1 tema (D1), al menos 1 departamento (F1), autorización mención (F2).
+      const isMandatory = (currentScreenId === "A1") ||
+                          (currentScreenId === "B1" && activeLogroIndex === 0) ||
+                          (currentScreenId === "B3" && activeLogroIndex === 0) ||
+                          (currentScreenId === "D1") ||
+                          (currentScreenId === "F1") ||
+                          (currentScreenId === "F2");
+
+      if (!isMandatory && currentScreenId !== "B_interstitial") {
+        btnSkip.style.display = "block";
+      } else {
+        btnSkip.style.display = "none";
+      }
+    }
+
+    /* ==========================================================================
+       MODALS & GLOBAL EVENT LISTENERS
+       ========================================================================== */
+    const modalExit = document.getElementById("modal-exit");
+    const modalResume = document.getElementById("modal-resume");
+
+    document.getElementById("btn-close").addEventListener("click", () => {
+      modalExit.classList.add("open");
+    });
+
+    document.getElementById("modal-exit-stay").addEventListener("click", () => {
+      modalExit.classList.remove("open");
+    });
+
+    document.getElementById("modal-exit-leave").addEventListener("click", () => {
+      saveDraft();
+      modalExit.classList.remove("open");
+      goToScreen("welcome", "prev");
+    });
+
+    document.getElementById("modal-resume-yes").addEventListener("click", () => {
+      modalResume.classList.remove("open");
+      goToScreen(currentScreenId || "A1", "next");
+    });
+
+    document.getElementById("modal-resume-no").addEventListener("click", () => {
+      clearDraft();
+      respuestas = defaultRespuestas();
+      currentScreenId = "welcome";
+      activeLogroIndex = 0;
+      modalResume.classList.remove("open");
+      goToScreen("welcome", "next");
+    });
+
+    document.getElementById("btn-next").addEventListener("click", handleNext);
+    document.getElementById("btn-prev").addEventListener("click", handlePrev);
+    document.getElementById("btn-skip").addEventListener("click", () => {
+      handleNext();
+    });
+
+    // Accesibilidad teclado: Enter en inputs para avanzar
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : "";
+        if (activeTag === "textarea") return; // Permitir saltos de línea en textareas
+        const currentObj = getCurrentScreenObj();
+        if (currentObj && currentObj.isValid()) {
+          e.preventDefault();
+          handleNext();
+        }
+      }
+    });
+
+    /* ==========================================================================
+       INITIALIZATION
+       ========================================================================== */
+    window.addEventListener("DOMContentLoaded", () => {
+      const hasDraft = loadDraft();
+      if (hasDraft && currentScreenId !== "welcome" && currentScreenId !== "final") {
+        modalResume.classList.add("open");
+        // Renderiza bienvenida detrás del modal
+        const card = document.getElementById("card-content");
+        card.innerHTML = SCREENS[0].render();
+        SCREENS[0].attachHandlers();
+      } else {
+        goToScreen("welcome");
+      }
+    });
+  </script>
+</body>
+</html>

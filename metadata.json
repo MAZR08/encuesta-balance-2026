@@ -1,0 +1,6 @@
+{
+  "name": "Balance de logros 2026 · CCJ",
+  "description": "Encuesta interactiva y moderna estilo Duolingo para el balance de logros 2026 de la Comisión Colombiana de Juristas (CCJ).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
